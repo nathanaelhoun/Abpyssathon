@@ -1,0 +1,6 @@
+# python stuff
+bot-env
+# dotenv 
+.env
+# vscode config
+.vscode
