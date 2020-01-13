@@ -2,24 +2,24 @@ from discord.ext import commands
 from datetime import datetime
 import os
 import discord
+from strings import Strings as STR
 
 class Utilities(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
     @commands.command()
-    async def recordchat(self, ctx):
-        '''Record all the chat into a .txt file'''
+    async def archivechat(self, ctx):
+        """Archive a channel into a .txt file"""
+        
         message = ctx.message
         log_file = "output-{0.id}.txt".format(message)
 
         try:
             with open(log_file, 'w', encoding="UTF-8") as file: 
-                    print("--- Archive beginning of channel {0.channel.name} (guild : {0.guild.name})".format(message))
+                    print(STR.ARCHIVE_BEGIN.format(message.channel.name, message.guild.name))
                     
-                    file.write("Guild : {0.guild.name}\n".format(message))
-                    file.write("Channel : #{0.channel.name}\n".format(message))
-                    file.write("Archive created on {}\n".format(datetime.now().strftime("%Y/%m/%d, %H:%M:%S")))
+                    file.write(STR.ARCHIVE_FILE_HEADER.format(message.guild.name, message.channel.name, datetime.now().strftime("%Y/%m/%d, %H:%M:%S")))
                     
                     async for msg in message.channel.history(limit=1000000000):
                         time_string = msg.created_at.strftime("%Y-%m-%d %H:%M")                
@@ -36,27 +36,75 @@ class Utilities(commands.Cog):
                         template = '[{time_str}] <{author}> {content} {attachment}\n'
                         file.write(template.format(time_str=time_string, author=author, content=content, attachment=attachment))
 
-                    file.write("Archive ended\n")
-                    print("--- Archive completed of #{0.channel.name} (guild : {0.guild.name})".format(message))
+                    file.write(STR.ARCHIVE_FILE_FOOTER)
+                    print(STR.ARCHIVE_COMPLETED.format(message.channel.name, message.guild.name))
 
-            content = ":ok: Archive du channel #{0.channel.name}".format(message)
-            filename = "Archive-channel-{0.channel.name}.txt".format(message)
+            filename = STR.ARCHIVE_SEND_FILENAME.format(message.channel.name)
+            
             try:
                 discord_file = discord.File(log_file, filename)
             except Exception:
-                print("ERROR : Impossible d'attacher le fichier")
+                message.author.send(STR.ARCHIVE_ERR_ATTACHMENT.format(message.channel.name))
+                return
+
             try:
-                await message.author.send(content=content, file=discord_file)
-                print('Archive of #{0.channel.name} (guild : {0.guild.name}) send to {0.author}'.format(message))
+                await message.author.send(content=STR.ARCHIVE_SEND_SUCCESSFUL.format(message.channel.name), file=discord_file)
             except:
-                await message.author.send("Impossible d'envoyer l'archive :sob:")
-                print('ERROR : Archive of #{0.channel.name} (guild : {0.guild.name}) not sent to {0.author}'.format(message))
+                await message.author.send(STR.ARCHIVE_ERR_SENDING)
 
         except:
-            await message.author.send("Impossible de créer l'archive :sob:")
-            print('ERROR : impossible to archive #{0.channel.name} (guild : {0.guild.name}) asked by {0.author}'.format(message))
+            await message.author.send(STR.ARCHIVE_ERR)
 
         os.remove(log_file)
+
+    # Command group
+    # Randomize team or picking someone
+    @commands.group()
+    async def random(self, ctx):
+        if ctx.invoked_subcommand is None:
+            await ctx.send(STR.ERR_NO_SUBCOMMAND)
+        
+    @random.command()
+    async def teams(self, ctx, numberPerTeam : int, role): 
+        """Randomize teams with the members of a discordrole"""
+        
+        if numberPerTeam < 2:
+            await ctx.send(STR.RANDOM_ERR_WRONG_NUMBER_IN_TEAM.format(numberPerTeam))
+            return
+
+        # maybe useful : Discord.Message.role_mentions
+        # TODO
+        pass
+
+    @random.command()
+    async def pickone(self, ctx, role : str):
+        """Pick randomly a member of a role"""
+        
+        # TODO
+        pass
+
+    
+    # Command group
+    # Homework gestion 
+    @commands.group()
+    async def hw(self, ctx):
+        if ctx.invoked_subcommand is None:
+            await bot.send(STR.ERR_NO_SUBCOMMAND)
+
+    @hw.command()
+    async def add(self, ctx, type : str, date : str, subject : str, label : str):
+        # TODO
+        pass
+
+    @hw.command()
+    async def show(self, ctx):
+        # TODO
+        pass
+
+    @hw.command()
+    async def remove(self, ctx, id : str):
+        # TODO
+        pass
 
 def setup(bot):
     bot.add_cog(Utilities(bot))

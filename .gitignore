@@ -1,6 +1,7 @@
 # python stuff
 bot-env
-cogs/__pycache__/*
+__pycache__
+*/__pycache__
 # dotenv 
 .env
 # vscode config
