@@ -1,4 +1,10 @@
-Scrap 
+Abpyssathon
+===================
+
+A Discordbot written in Python.
+
+## Features
+(list is coming...) 
 
 ## Dependencies
 ```bash
