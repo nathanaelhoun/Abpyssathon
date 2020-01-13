@@ -74,7 +74,7 @@ class Utilities(commands.Cog):
 
         # maybe useful : Discord.Message.role_mentions
         # TODO
-        pass
+        pass        
 
     @random.command()
     async def pickone(self, ctx, role : str):

@@ -3,8 +3,13 @@ class Strings:
     LAUNCH_SUCCESSFUL = 'Je suis vivant !'
     CONNECTION_SUCCESSFUL = 'Connecté en tant que {}'
 
-    ERR_PRIVATE_CHANNEL = ":x: Désolé, mais je n'accepte pas les commandes depuis les messages privés ! Contacte-moi sur un serveur :wink:"
     ERR_NO_SUBCOMMAND = ":vs: Sous-commande non valide"
+    ERR_BOT_MISSING_PERMISSIONS = ":x: Je n'ai pas assez de permissions pour faire ça..."
+    ERR_PRIVATE_CHANNEL = ":x: Désolé, mais je n'accepte pas les commandes depuis les messages privés ! Contacte-moi sur un serveur :wink:"
+    ERR_BAD_ARGUMENTS = ":vs: Mauvais arguments passés en paramètre"
+    ERR_MISSING_REQUIRED_ARGUMENT = ":x: Il manque un argument requis pour cette fonction"
+
+    HELP = "**Menu d'aide**"
 
     # Function : fun.ping()
     PING = "Pong ! :ping_pong:"
