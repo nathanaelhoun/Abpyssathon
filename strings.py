@@ -30,4 +30,7 @@ class Strings:
     # Commands group : utilities.random()
     RANDOM_ERR_WRONG_NUMBER_IN_TEAM = ":vs: Tu crois vraiment qu'on va faire des équipes avec **{}** personne dans chaque ? :P "
 
+    RANDOM_TEAMS_PERFECT = ":white_check_mark: J'ai constitué des groupes de {} avec le rôle {}"
+    RANDOM_TEAMS_TEAM_LABEL = ":diamond_shape_with_a_dot_inside: Équipe {} :"
+    RANDOM_TEAMS_MEMBER_LABEL = "            :white_medium_small_square: {}"
     RANDOM_PICKONE_SUCCESS = "Et l'élu est {} !"

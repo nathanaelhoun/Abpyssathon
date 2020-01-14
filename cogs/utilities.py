@@ -98,9 +98,30 @@ class Utilities(commands.Cog):
             await ctx.send(STR.RANDOM_ERR_WRONG_NUMBER_IN_TEAM.format(numberPerTeam))
             return
 
-        # maybe useful : Discord.Message.role_mentions
-        # TODO
-        pass
+        members_to_pick = role.members.copy()
+        teams = list()
+        while len(members_to_pick) > 0:
+            new_team = list()
+            while len(new_team) < numberPerTeam and len(members_to_pick) > 0:
+                new_team.append(
+                    members_to_pick.pop(random.randrange(len(role.members)))
+                )
+
+            teams.append(new_team)
+
+        await ctx.send(STR.RANDOM_TEAMS_PERFECT.format(numberPerTeam, role.mention))
+        team_number = 0
+        result_string = ""
+        for team in teams:
+            result_string += "\n"
+            result_string += STR.RANDOM_TEAMS_TEAM_LABEL.format(team_number + 1)
+            for member in team:
+                result_string += "\n"
+                result_string += STR.RANDOM_TEAMS_MEMBER_LABEL.format(
+                    member.display_name
+                )
+
+        await ctx.send(result_string)
 
     @random.command()
     async def pickone(self, ctx, role: discord.Role):
