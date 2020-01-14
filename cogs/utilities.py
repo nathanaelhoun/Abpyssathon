@@ -2,6 +2,7 @@ from discord.ext import commands
 from datetime import datetime
 import os
 import discord
+import random
 from strings import Strings as STR
 
 
@@ -102,11 +103,11 @@ class Utilities(commands.Cog):
         pass
 
     @random.command()
-    async def pickone(self, ctx, role: str):
+    async def pickone(self, ctx, role: discord.Role):
         """Pick randomly a member of a role"""
 
-        # TODO
-        pass
+        chosen_member = role.members[random.randrange(len(role.members))]
+        await ctx.send(STR.RANDOM_PICKONE_SUCCESS.format(chosen_member.mention))
 
     # Command group -----------------------------------------------------------
     # Homework gestion

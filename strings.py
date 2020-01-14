@@ -29,3 +29,5 @@ class Strings:
 
     # Commands group : utilities.random()
     RANDOM_ERR_WRONG_NUMBER_IN_TEAM = ":vs: Tu crois vraiment qu'on va faire des équipes avec **{}** personne dans chaque ? :P "
+
+    RANDOM_PICKONE_SUCCESS = "Et l'élu est {} !"
