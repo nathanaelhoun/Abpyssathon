@@ -2,6 +2,7 @@ from discord.ext import commands
 import discord
 from strings import Strings as STR
 
+
 class Events(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -30,8 +31,14 @@ class Events(commands.Cog):
         if isinstance(error, commands.MissingRequiredArgument):
             await ctx.send(STR.ERR_MISSING_REQUIRED_ARGUMENT)
 
-        if isinstance(error, commands.BadArgument) or isinstance(error, commands.ConversionError) or isinstance(error, commands.UnexpectedQuoteError) or isinstance(error, commands.ArgumentParsingError):
+        if (
+            isinstance(error, commands.BadArgument)
+            or isinstance(error, commands.ConversionError)
+            or isinstance(error, commands.UnexpectedQuoteError)
+            or isinstance(error, commands.ArgumentParsingError)
+        ):
             await ctx.send(STR.ERR_BAD_ARGUMENTS)
+
 
 def setup(bot):
     bot.add_cog(Events(bot))
