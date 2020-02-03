@@ -7,16 +7,12 @@ A Discordbot written in Python.
 (list is coming...) 
 
 ## Dependencies
+- Python3
 ```bash
-sudo apt install libffi-dev libnacl-dev python3-dev python3 -m venv bot-env
+sudo apt install python3 python3-pip virtual-env
 ```
 
-Activate bot-env
+- discord.py
 ```bash
-source bot-env/bin/activate
-```
-
-Python dependencies
-```bash
-pip install -U discord.py
+python3 -m pip install -U discord.py python-dotenv
 ```
