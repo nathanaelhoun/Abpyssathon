@@ -1,5 +1,4 @@
 from discord.ext import commands
-from strings import *
 from strings import Strings as STR
 import discord
 
