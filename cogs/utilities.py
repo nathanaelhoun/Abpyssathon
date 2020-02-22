@@ -91,7 +91,7 @@ class Utilities(commands.Cog):
             await ctx.send(STR.ERR_NO_SUBCOMMAND)
 
     @random.command()
-    async def teams(self, ctx, numberPerTeam: int, role: discord.Role):
+    async def teams(self, ctx, role: discord.Role, numberPerTeam: int):
         """Randomize teams with the members of a discordrole"""
 
         if numberPerTeam < 2:
@@ -100,11 +100,12 @@ class Utilities(commands.Cog):
 
         members_to_pick = role.members.copy()
         teams = list()
+
         while len(members_to_pick) > 0:
             new_team = list()
             while len(new_team) < numberPerTeam and len(members_to_pick) > 0:
                 new_team.append(
-                    members_to_pick.pop(random.randrange(len(role.members)))
+                    members_to_pick.pop(random.randrange(len(members_to_pick)))
                 )
 
             teams.append(new_team)
@@ -112,6 +113,7 @@ class Utilities(commands.Cog):
         await ctx.send(STR.RANDOM_TEAMS_PERFECT.format(numberPerTeam, role.mention))
         team_number = 0
         result_string = ""
+
         for team in teams:
             result_string += "\n"
             result_string += STR.RANDOM_TEAMS_TEAM_LABEL.format(team_number + 1)
