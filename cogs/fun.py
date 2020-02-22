@@ -3,6 +3,7 @@ from strings import Strings as STR
 import discord
 
 
+
 class Fun(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -14,10 +15,10 @@ class Fun(commands.Cog):
         await ctx.send(STR.PING)
 
     @commands.command()
-    async def activity(self, ctx, *, newActivity: str):
-        """Set a new activity for the bot"""
+    async def activity(self, ctx, newActivity: str):
+      """Set a new activity for the bot"""
 
-        # TODO : Check if admin
+      # TODO : Check if admin
         game = discord.Game(newActivity)
         await self.bot.change_presence(status=discord.Status.online, activity=game)
 
@@ -39,6 +40,7 @@ class Fun(commands.Cog):
 
         # TODO
         pass
+
 
 
 def setup(bot):
