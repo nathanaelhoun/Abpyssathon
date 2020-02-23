@@ -34,3 +34,15 @@ class Strings:
     RANDOM_TEAMS_TEAM_LABEL = ":diamond_shape_with_a_dot_inside: Équipe {} :"
     RANDOM_TEAMS_MEMBER_LABEL = "            :white_medium_small_square: {}"
     RANDOM_PICKONE_SUCCESS = "Et l'élu est {} !"
+
+    # Commands group : score()
+    SCORE_ADD_ERR_NAN = ":x: Ceci n'est pas un nombre de point"
+    SCORE_ADD_ERR_NEGATIVE = ":x: Impossible d'ajouter un nombre négatif de point"
+    SCORE_ADD_ERR_POSITIVE = ":x: Impossible de retirer un nombre positif de point"
+    SCORE_ERR_DATABASE = ":x: Ajout à la base échoué"
+    SCORE_ADD_SUCCESSFULLY = ":white_check_mark: J'ai bien rajouté {} points à **{}** sur ordre de _{}_."
+    
+    SCORE_SHOW_NO_POINTS="Rien à afficher. Vous êtes tous des élèves sages. :scream: "
+    SCORE_SHOW_RANKING_INTRO=":trophy: Et voici le classement des points de int "
+    SCORE_SHOW_RANKING_ITEM="#{} : {} ({} points)"
+    SCORE_SHOW_MEMBER_HAS_LEFT="_a quitté le serveur_"
