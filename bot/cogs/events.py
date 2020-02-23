@@ -2,6 +2,7 @@ from discord.ext import commands
 import discord
 from strings import Strings as STR
 
+
 class Events(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -25,7 +26,7 @@ class Events(commands.Cog):
             await ctx.send(STR.ERR_BOT_MISSING_PERMISSIONS)
 
         if isinstance(error, commands.CommandNotFound):
-            await ctx.send(STR.HELP)
+            await ctx.send(STR.ERR_NO_COMMAND)
 
         if isinstance(error, commands.MissingRequiredArgument):
             await ctx.send(STR.ERR_MISSING_REQUIRED_ARGUMENT)

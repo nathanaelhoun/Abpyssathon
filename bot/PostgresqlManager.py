@@ -1,8 +1,8 @@
 import psycopg2
 from discord.ext import commands
 
-class PostgresqlManager:
 
+class PostgresqlManager:
     def connect(self, database_url: str):
         self._conn = psycopg2.connect(database_url, sslmode="require")
 
@@ -24,7 +24,7 @@ class PostgresqlManager:
     # def select(self, select : str, from_tables : str, where : str, end_of_sql_request : str ):
     #     if where == "":
     #         where = "TRUE"
-        
+
     #     sql = ("SELECT " + select +
     #     " FROM " + from_tables +
     #     " WHERE " + where +
@@ -38,7 +38,9 @@ class PostgresqlManager:
 
     def execute(self, sql):
         self.cursor_connect()
-        cursor = self._cursor # future: might create a self.get_new_cursor() function to multithreaded tasks ?
+        cursor = (
+            self._cursor
+        )  # future: might create a self.get_new_cursor() function to multithreaded tasks ?
         try:
             cursor.execute(sql)
         except Exception as e:

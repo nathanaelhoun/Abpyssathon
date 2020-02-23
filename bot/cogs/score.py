@@ -10,7 +10,7 @@ class Score(commands.Cog):
     @commands.group()
     async def score(self, ctx):
         if ctx.invoked_subcommand is None:
-            await bot.send(STR.ERR_NO_SUBCOMMAND)
+            await ctx.send(STR.ERR_NO_SUBCOMMAND)
 
     @score.command()
     async def show(self, ctx):
