@@ -8,7 +8,39 @@ class Score(commands.Cog):
         self.bot = bot
 
     @commands.group()
+    async def category(self, ctx):
+        """Manage the score categories for the guild"""
+        if ctx.invoked_subcommand is None:
+            await ctx.send(STR.ERR_NO_SUBCOMMAND)
+
+    @category.command()
+    async def list(self, ctx):
+        """List all the categories in the guild"""
+        
+        try:
+            rows = self.bot.db.execute(
+                "SELECT cat_label FROM score_category WHERE cat_guild_id = {}".format(
+                    ctx.guild.id
+                )
+            )
+
+            if len(rows) == 0:
+                await ctx.send(STR.CAT_NO_CAT)
+                return
+
+            result_string = STR.CAT_LIST_INTRO
+            for row in rows:
+                result_string += "\n" + STR.CAT_LIST_ITEM.format(row[0])
+
+            await ctx.send(result_string)
+        except Exception as e:
+            print(e)
+            
+        
+
+    @commands.group()
     async def score(self, ctx):
+        """Manage scores for the members of the guild"""
         if ctx.invoked_subcommand is None:
             await ctx.send(STR.ERR_NO_SUBCOMMAND)
 

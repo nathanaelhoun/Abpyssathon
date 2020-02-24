@@ -41,6 +41,10 @@ class Strings:
     RANDOM_PICKONE_SUCCESS = "Et l'élu est {} !"
 
     # Commands group : score()
+    CAT_NO_CAT = "Il n'y a pas de catégories enregistrées sur ce serveur !"
+    CAT_LIST_INTRO = EM_OK + "Voici la liste des catégories pour ce serveur :"
+    CAT_LIST_ITEM = "- {}"
+
     SCORE_ADD_ERR_NAN = EM_FATAL_ERROR + "Ceci n'est pas un nombre de point"
     SCORE_ADD_ERR_NEGATIVE = EM_FATAL_ERROR + "Impossible d'ajouter un nombre négatif de point"
     SCORE_ADD_ERR_POSITIVE = EM_FATAL_ERROR + "Impossible de retirer un nombre positif de point"
@@ -51,3 +55,4 @@ class Strings:
     SCORE_SHOW_RANKING_INTRO=":trophy: Et voici le classement des points de int "
     SCORE_SHOW_RANKING_ITEM="#{} : {} ({} points)"
     SCORE_SHOW_MEMBER_HAS_LEFT="_a quitté le serveur_"
+
