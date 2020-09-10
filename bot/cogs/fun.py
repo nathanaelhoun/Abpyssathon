@@ -20,7 +20,10 @@ class Fun(commands.Cog):
         # TODO : Check if admin
         game = discord.Game(newActivity)
         await self.bot.change_presence(status=discord.Status.online, activity=game)
-
+        await ctx.send(STR.ACTIVITY_NEW.format(
+            newActivity,
+            ctx.message.author
+        ))
 
 def setup(bot):
     bot.add_cog(Fun(bot))

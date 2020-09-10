@@ -2,9 +2,15 @@
 
 A Discordbot written in Python.
 
-## Features
+# Features
 
 (list is coming...)
+
+# Installation and deploying
+
+TODO
+
+# Contributing
 
 ## Dependencies
 
@@ -20,4 +26,19 @@ sudo apt install python3 python3-pip virtual-env
 ```bash
 python3 -m pip install -U discord.py python-dotenv
 python3 -m pip install psycopg2-binary
+```
+
+## Configure
+
+Create a `.env` file with these tokens:
+
+```
+BOT_TOKEN=<bot-token-here>
+DATABASE_URL=postgres://<full-postgresql-database-url-here>
+```
+
+## Launch the bot
+
+```bash
+python3 bot/main.py
 ```

@@ -20,6 +20,9 @@ class Strings:
     # Function : fun.ping()
     PING = "Pong ! :ping_pong:"
 
+    # Function : fun.activity()
+    ACTIVITY_NEW = EM_OK + "Je suis maintenant en train de jouer à **{}** sur ordre de _{}_"
+
     # Function : utilities.archivechat()
     ARCHIVE_BEGIN = '--- Archive beginning of channel {} (guild : {})'
     ARCHIVE_FILE_HEADER = "Guild : {} \nChannel : #{} \nArchive created on {} \n"

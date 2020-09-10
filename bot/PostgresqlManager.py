@@ -18,7 +18,7 @@ class PostgresqlManager:
     def disconnect(self):
         if hasattr(self, "_cursor") and self._cursor is not None:
             self._cursor.close()
-        if self._conn is not None:
+        if hasattr(self, "_conn") and self._conn is not None:
             self._conn.close()
 
     # def select(self, select : str, from_tables : str, where : str, end_of_sql_request : str ):
