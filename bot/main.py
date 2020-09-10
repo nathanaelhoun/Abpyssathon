@@ -1,17 +1,18 @@
 import os
+import asyncio
 from dotenv import load_dotenv
 from abpyssathon import Abpyssathon as Abpyssathon
 import PostgresqlManager
 
 print("Loading environment variables... ", end="")
 load_dotenv()
-print("done !")
+print("done!")
 
 print("Connecting to database... ", end="")
 try:
     db = PostgresqlManager.PostgresqlManager()
     db.connect(os.getenv("DATABASE_URL"))
-    print("done !")
+    print("done!")
 except Exception as e:
     print("Failed :(")
     print(e)
@@ -24,14 +25,17 @@ client.load_extension("cogs.events")
 client.load_extension("cogs.fun")
 client.load_extension("cogs.score")
 client.load_extension("cogs.utilities")
-print("done !")
+print("done!")
 
-print("Ready to launch client... ", end="")
-print("Running client")
+print("Ready to launch client. ", end="")
+print("Running client...")
 try:
     client.run(os.getenv("BOT_TOKEN"))
 finally:
+    print("\nLogging out client... ", end="")
+    asyncio.run(client.logout())
+    print("done! ")
+
     print("Disconnecting from database... ", end="")
     db.disconnect()
-    print("done ! ")
-    client.logout()
+    print("done! ")
