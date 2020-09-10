@@ -10,13 +10,36 @@ class Score(commands.Cog):
     @commands.group()
     async def category(self, ctx):
         """Manage the score categories for the guild"""
+
         if ctx.invoked_subcommand is None:
             await ctx.send(STR.ERR_NO_SUBCOMMAND)
 
     @category.command()
+    async def add(self, ctx, name: str):
+        """Add a score category to the guild"""
+
+        print("----------- self : {}".format(self))
+        print("----------- ctx : {}".format(ctx))
+        print("----------- name : {}".format(name))
+
+        # sql = """INSERT INTO score_category(cat_guild_id, cat_label)
+        # VALUES ({}, '{}')
+        # ON CONFLICT (cat_guild_id, cat_label)
+        # DO NOTHING;"""
+
+        # sql.format(ctx.guild.id, name)
+
+        # try:
+        #     self.bot.db.insert(sql)
+        #     await ctx.send(STR.CAT_ADD_SUCCESS.format(name))
+        # except Exception as e:
+        #     print(e)
+        #     await ctx.send(STR.ERR_DATABASE)
+
+    @category.command()
     async def list(self, ctx):
         """List all the categories in the guild"""
-        
+
         try:
             rows = self.bot.db.execute(
                 "SELECT cat_label FROM score_category WHERE cat_guild_id = {}".format(
@@ -34,9 +57,8 @@ class Score(commands.Cog):
 
             await ctx.send(result_string)
         except Exception as e:
+            await ctx.send(STR.ERR_DATABASE)
             print(e)
-            
-        
 
     @commands.group()
     async def score(self, ctx):
@@ -110,7 +132,7 @@ class Score(commands.Cog):
                 sql += ", "
                 members_name += ", "
 
-            sql += "({},{},{},{})".format(ctx.guild.id, member.id, category, value)
+            sql += "({}, {}, {}, {})".format(ctx.guild.id, member.id, category, value)
             members_name += member.display_name
 
         sql += """
@@ -126,7 +148,7 @@ class Score(commands.Cog):
             )
         except Exception as e:
             print(e)
-            await ctx.send(STR.SCORE_ERR_DATABASE)
+            await ctx.send(STR.ERR_DATABASE)
 
     @score.command()
     async def add(self, ctx, quantity: str):  # , category: str):
@@ -134,6 +156,10 @@ class Score(commands.Cog):
         
         You can add points to several guild members or the members of a role by tagging them in the command
         """
+
+        print("----------- self : {}".format(self))
+        print("----------- ctx : {}".format(ctx))
+        print("----------- quantity : {}".format(quantity))
 
         category = 1  # TODO categories are not implemented yet
 

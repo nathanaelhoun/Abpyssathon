@@ -8,13 +8,14 @@ class Strings:
     # General
     LAUNCH_SUCCESSFUL = 'Je suis vivant !'
     CONNECTION_SUCCESSFUL = 'Connecté en tant que {}'
-
+    
     ERR_NO_COMMAND = "Cette commande n'existe pas. Tapez `&help` et je vous aiderai !"
     ERR_NO_SUBCOMMAND = EM_WARNING + "Sous-commande non valide"
     ERR_BOT_MISSING_PERMISSIONS = EM_FATAL_ERROR + "Je n'ai pas assez de permissions pour faire ça..."
     ERR_PRIVATE_CHANNEL = EM_FATAL_ERROR + "Désolé, mais je n'accepte pas les commandes depuis les messages privés ! Contacte-moi sur un serveur :wink:"
     ERR_BAD_ARGUMENTS = EM_WARNING + "Mauvais arguments passés en paramètre"
     ERR_MISSING_REQUIRED_ARGUMENT = EM_FATAL_ERROR + "Il manque un argument requis pour cette fonction"
+    ERR_DATABASE = EM_FATAL_ERROR + "Impossible de me connecter à ma base de données, désolé..."
 
     # Function : fun.ping()
     PING = "Pong ! :ping_pong:"
@@ -44,11 +45,11 @@ class Strings:
     CAT_NO_CAT = "Il n'y a pas de catégories enregistrées sur ce serveur !"
     CAT_LIST_INTRO = EM_OK + "Voici la liste des catégories pour ce serveur :"
     CAT_LIST_ITEM = "- {}"
+    CAT_ADD_SUCCESS = "Ajout de la catégorie de score **{}** réalisée avec succès !"
 
     SCORE_ADD_ERR_NAN = EM_FATAL_ERROR + "Ceci n'est pas un nombre de point"
     SCORE_ADD_ERR_NEGATIVE = EM_FATAL_ERROR + "Impossible d'ajouter un nombre négatif de point"
     SCORE_ADD_ERR_POSITIVE = EM_FATAL_ERROR + "Impossible de retirer un nombre positif de point"
-    SCORE_ERR_DATABASE = EM_FATAL_ERROR + "Ajout à la base échoué"
     SCORE_ADD_SUCCESSFULLY = EM_SUCCESS + "J'ai bien rajouté {} points à **{}** sur ordre de _{}_."
     
     SCORE_SHOW_NO_POINTS="Rien à afficher. Vous êtes tous des élèves sages. :scream: "

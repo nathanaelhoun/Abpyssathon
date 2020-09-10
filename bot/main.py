@@ -34,4 +34,4 @@ finally:
     print("Disconnecting from database... ", end="")
     db.disconnect()
     print("done ! ")
-    bot.logout()
+    client.logout()
