@@ -153,7 +153,7 @@ class Score(commands.Cog):
     @score.command()
     async def add(self, ctx, quantity: str):  # , category: str):
         """Add points to a guild members
-        
+
         You can add points to several guild members or the members of a role by tagging them in the command
         """
 
@@ -177,7 +177,7 @@ class Score(commands.Cog):
     @score.command()
     async def remove(self, ctx, quantity: str):  # , category: str):
         """Remove points to a guild members
-        
+
         Works the same way as add functions
         """
 

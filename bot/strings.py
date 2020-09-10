@@ -24,13 +24,15 @@ class Strings:
     ACTIVITY_NEW = EM_OK + "Je suis maintenant en train de jouer à **{}** sur ordre de _{}_"
 
     # Function : utilities.archivechat()
-    ARCHIVE_BEGIN = '--- Archive beginning of channel {} (guild : {})'
+    ARCHIVE_BEGIN = '--- Beginning archiving of channel {} (guild : {})'
+    ARCHIVE_NOTIF_BEGIN = "Je commence à archiver ce canal, une seconde..."
     ARCHIVE_FILE_HEADER = "Guild : {} \nChannel : #{} \nArchive created on {} \n"
-    ARCHIVE_FILE_FOOTER = "Archive ended\n"
-    ARCHIVE_COMPLETED = '--- Archive completed of #{} (guild : {})"'
+    ARCHIVE_FILE_FOOTER = "Archive end\n"
+    ARCHIVE_COMPLETED = '--- Archive of #{} (guild : {}) completed'
     
-    ARCHIVE_SEND_SUCCESSFUL = EM_OK + "Archive du channel #{}"
-    ARCHIVE_SEND_FILENAME = "Archive-channel-{}.txt"
+    ARCHIVE_SUCESSFULLY_SENT = EM_OK + "Archive du channel bien envoyée par message privé à {}"
+    ARCHIVE_SEND_SUCCESSFUL = EM_OK + "Archive du channel #{} (Serveur {})"
+    ARCHIVE_SEND_FILENAME = "Archive-channel-{}-of-{}.txt"
 
     ARCHIVE_ERR_ATTACHMENT = EM_FATAL_ERROR + "Impossible d'attacher le fichier archive de #{} :sob:"
     ARCHIVE_ERR_SENDING = EM_FATAL_ERROR + "Impossible d'envoyer l'archive :sob:"
