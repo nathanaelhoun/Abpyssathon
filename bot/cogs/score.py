@@ -191,6 +191,7 @@ class Score(commands.Cog):
         if value < 0:
             await ctx.send(STR.SCORE_ADD_ERR_NEGATIVE)
             return
+
         try:
             await self.modify_points(ctx, (-value), category)
             pass
