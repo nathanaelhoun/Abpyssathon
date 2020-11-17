@@ -35,8 +35,8 @@ class Score(commands.Cog):
 
             result_string = ""
             i = 0
+            previous_value = 0
             for row in rows:
-                i += 1
                 # row[0] is guild id
                 # row[1] is member id
                 # row[2] is value
@@ -47,6 +47,10 @@ class Score(commands.Cog):
 
                 if member_name == "":
                     member_name = STR.SCORE_SHOW_MEMBER_HAS_LEFT
+
+                if previous_value != row[2]:
+                    previous_value = row[2]
+                    i += 1
 
                 result_string += "\n" + STR.SCORE_SHOW_RANKING_ITEM.format(
                     i, member_name, row[2]
