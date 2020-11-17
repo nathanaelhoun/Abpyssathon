@@ -85,6 +85,9 @@ class Score(commands.Cog):
 
             result_string = ""
             i = 0
+
+            print(ctx.guild.members)
+
             for row in rows:
                 i += 1
                 # row[0] is guild id
@@ -103,7 +106,7 @@ class Score(commands.Cog):
                     i, member_name, row[3]
                 )
 
-            await ctx.send(STR.SCORE_SHOW_RANKING_INTRO + "```" + result_string + "```")
+            await ctx.send(STR.SCORE_SHOW_RANKING_INTRO + result_string)
 
         except Exception as e:
             print(e)

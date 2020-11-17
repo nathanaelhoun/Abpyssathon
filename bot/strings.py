@@ -60,5 +60,5 @@ class Strings:
     SCORE_SHOW_NO_POINTS="Rien à afficher. Vous êtes tous des élèves sages. :scream: "
     SCORE_SHOW_RANKING_INTRO=":trophy: Et voici le classement des points de int "
     SCORE_SHOW_RANKING_ITEM="#{} : {} ({} points)"
-    SCORE_SHOW_MEMBER_HAS_LEFT="_a quitté le serveur_"
+    SCORE_SHOW_MEMBER_HAS_LEFT="*a quitté le serveur*"
 
