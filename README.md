@@ -7,7 +7,7 @@ A Discordbot for my class group, written in Python with [discordpy](https://disc
 - 🏆 Count the points for all members and output a ranking. A point equals the absence to one lesson
 - 🎲 Pick a random member, he/she will have to do this task no one wants to do
 - 🎲 Make random teams with the members of a discord role, to gain time for our class projects
-- 🏓 Last but not least, answers "Pong" to "&ping"
+- 🏓 Last but not least, answers "Pong" to "&ping" (plus a special Medhi version with "&ping2")
 
 See all commands with the `&help` bot command.
 

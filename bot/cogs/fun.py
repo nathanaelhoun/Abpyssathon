@@ -14,6 +14,12 @@ class Fun(commands.Cog):
         await ctx.send(STR.PING)
 
     @commands.command()
+    async def ping2(self, ctx):
+        """Answer pong to ping and tag the best user of the server (Medhi)"""
+
+        await ctx.send(STR.PING2)
+
+    @commands.command()
     async def activity(self, ctx, newActivity: str):
         """Set a new activity for the bot"""
 
