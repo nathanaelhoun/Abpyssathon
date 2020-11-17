@@ -8,59 +8,6 @@ class Score(commands.Cog):
         self.bot = bot
 
     @commands.group()
-    async def category(self, ctx):
-        """Manage the score categories for the guild"""
-
-        if ctx.invoked_subcommand is None:
-            await ctx.send(STR.ERR_NO_SUBCOMMAND)
-
-    @category.command()
-    async def add(self, ctx, name: str):
-        """Add a score category to the guild"""
-
-        print("----------- self : {}".format(self))
-        print("----------- ctx : {}".format(ctx))
-        print("----------- name : {}".format(name))
-
-        # sql = """INSERT INTO score_category(cat_guild_id, cat_label)
-        # VALUES ({}, '{}')
-        # ON CONFLICT (cat_guild_id, cat_label)
-        # DO NOTHING;"""
-
-        # sql.format(ctx.guild.id, name)
-
-        # try:
-        #     self.bot.db.insert(sql)
-        #     await ctx.send(STR.CAT_ADD_SUCCESS.format(name))
-        # except Exception as e:
-        #     print(e)
-        #     await ctx.send(STR.ERR_DATABASE)
-
-    @category.command()
-    async def list(self, ctx):
-        """List all the categories in the guild"""
-
-        try:
-            rows = self.bot.db.execute(
-                "SELECT cat_label FROM score_category WHERE cat_guild_id = {}".format(
-                    ctx.guild.id
-                )
-            )
-
-            if len(rows) == 0:
-                await ctx.send(STR.CAT_NO_CAT)
-                return
-
-            result_string = STR.CAT_LIST_INTRO
-            for row in rows:
-                result_string += "\n" + STR.CAT_LIST_ITEM.format(row[0])
-
-            await ctx.send(result_string)
-        except Exception as e:
-            await ctx.send(STR.ERR_DATABASE)
-            print(e)
-
-    @commands.group()
     async def score(self, ctx):
         """Manage scores for the members of the guild"""
         if ctx.invoked_subcommand is None:
@@ -70,12 +17,14 @@ class Score(commands.Cog):
     async def show(self, ctx):
         """Show the score of each member of the guild"""
 
-        category = 1  # categories are not implemented yet
-
         try:
             rows = self.bot.db.execute(
-                "SELECT * FROM score WHERE sco_guild_id = {} AND sco_category_id = {}".format(
-                    ctx.guild.id, category
+                """
+                SELECT * 
+                FROM score 
+                WHERE sco_guild_id = {} 
+                """.format(
+                    ctx.guild.id
                 )
             )
 
@@ -85,15 +34,11 @@ class Score(commands.Cog):
 
             result_string = ""
             i = 0
-
-            print(ctx.guild.members)
-
             for row in rows:
                 i += 1
                 # row[0] is guild id
                 # row[1] is member id
-                # row[2] is category id
-                # row[3] is value
+                # row[2] is value
                 member_name = ""
                 for member in ctx.guild.members:
                     if member.id == row[1]:
@@ -103,18 +48,18 @@ class Score(commands.Cog):
                     member_name = STR.SCORE_SHOW_MEMBER_HAS_LEFT
 
                 result_string += "\n" + STR.SCORE_SHOW_RANKING_ITEM.format(
-                    i, member_name, row[3]
+                    i, member_name, row[2]
                 )
 
-            await ctx.send(STR.SCORE_SHOW_RANKING_INTRO + result_string)
+            await ctx.send(
+                "{}\n```\n{}\n```".format(STR.SCORE_SHOW_RANKING_INTRO, result_string)
+            )
 
         except Exception as e:
             print(e)
 
-    async def modify_points(self, ctx, value: int, category):
+    async def modify_points(self, ctx, value: int):
         """Add or remove points to guild members in the database"""
-
-        # TODO implement categories (search for the id with the name in the db and output an error if the id doesn't exist)
 
         members = set()
         if len(ctx.message.mentions) == 0 and len(ctx.message.role_mentions) == 0:
@@ -128,44 +73,48 @@ class Score(commands.Cog):
             for member in role.members:
                 members.add(member)
 
-        sql = """INSERT INTO score VALUES """
+        values_sql = ""
         members_name = ""
         for member in members:
             if members_name != "":
-                sql += ", "
+                values_sql += ", "
                 members_name += ", "
 
-            sql += "({}, {}, {}, {})".format(ctx.guild.id, member.id, category, value)
+            values_sql += "({}, {}, {})".format(ctx.guild.id, member.id, value)
             members_name += member.display_name
 
-        sql += """
-            ON CONFLICT (sco_guild_id, sco_member_id, sco_category_id) 
-            DO UPDATE SET sco_value = score.sco_value + EXCLUDED.sco_value;"""
+        sql = """
+        INSERT INTO score VALUES
+        {}
+        ON CONFLICT (sco_guild_id, sco_member_id) 
+        DO UPDATE SET sco_value = score.sco_value + EXCLUDED.sco_value;
+        """.format(
+            values_sql
+        )
 
         try:
             self.bot.db.insert(sql)
-            await ctx.send(
-                STR.SCORE_ADD_SUCCESSFULLY.format(
-                    value, members_name, ctx.author.display_name
-                )
+
+            message = STR.SCORE_ADD_SUCCESSFULLY.format(
+                value, members_name, ctx.author.display_name
             )
+            if value < 0:
+                message = STR.SCORE_REMOVE_SUCCESSFULLY.format(
+                    -value, members_name, ctx.author.display_name
+                )
+
+            await ctx.send(message)
         except Exception as e:
             print(e)
             await ctx.send(STR.ERR_DATABASE)
 
     @score.command()
-    async def add(self, ctx, quantity: str):  # , category: str):
+    async def add(self, ctx, quantity: str):
         """Add points to a guild members
 
         You can add points to several guild members or the members of a role by tagging them in the command
         """
 
-        print("----------- self : {}".format(self))
-        print("----------- ctx : {}".format(ctx))
-        print("----------- quantity : {}".format(quantity))
-
-        category = 1  # TODO categories are not implemented yet
-
         try:
             value = int(quantity)
         except Exception as e:
@@ -175,17 +124,15 @@ class Score(commands.Cog):
             await ctx.send(STR.SCORE_ADD_ERR_NEGATIVE)
             return
 
-        await self.modify_points(ctx, value, category)
+        await self.modify_points(ctx, value)
 
     @score.command()
-    async def remove(self, ctx, quantity: str):  # , category: str):
+    async def remove(self, ctx, quantity: str):
         """Remove points to a guild members
 
         Works the same way as add functions
         """
 
-        category = 1  # TODO categories are not implemented yet
-
         try:
             value = int(quantity)
         except Exception as e:
@@ -196,7 +143,7 @@ class Score(commands.Cog):
             return
 
         try:
-            await self.modify_points(ctx, (-value), category)
+            await self.modify_points(ctx, (-value))
             pass
         except Exception as e:
             print(e)

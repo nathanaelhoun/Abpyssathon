@@ -56,6 +56,8 @@ class Strings:
     SCORE_ADD_ERR_NEGATIVE = EM_FATAL_ERROR + "Impossible d'ajouter un nombre négatif de point"
     SCORE_ADD_ERR_POSITIVE = EM_FATAL_ERROR + "Impossible de retirer un nombre positif de point"
     SCORE_ADD_SUCCESSFULLY = EM_SUCCESS + "J'ai bien rajouté {} points à **{}** sur ordre de _{}_."
+    SCORE_REMOVE_SUCCESSFULLY = EM_SUCCESS + "J'ai bien retiré {} points à **{}** sur ordre de _{}_."
+
     
     SCORE_SHOW_NO_POINTS="Rien à afficher. Vous êtes tous des élèves sages. :scream: "
     SCORE_SHOW_RANKING_INTRO=":trophy: Et voici le classement des points de int "
