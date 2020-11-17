@@ -1,5 +1,6 @@
 from discord.ext import commands
 from strings import Strings as STR
+from discord import Embed as DiscordEmbed
 import math
 
 
@@ -51,9 +52,11 @@ class Score(commands.Cog):
                     i, member_name, row[2]
                 )
 
-            await ctx.send(
-                "{}\n```\n{}\n```".format(STR.SCORE_SHOW_RANKING_INTRO, result_string)
+            embed = DiscordEmbed(
+                title=STR.SCORE_SHOW_RANKING_INTRO,
+                description="```\n{}\n```".format(result_string),
             )
+            await ctx.send(STR.SCORE_SHOW_RANKING_INTRO, embed=embed)
 
         except Exception as e:
             print(e)
