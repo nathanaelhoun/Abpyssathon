@@ -6,8 +6,7 @@ class Strings:
     EM_SUCCESS = ":white_check_mark: "
 
     # General
-    LAUNCH_SUCCESSFUL = 'Je suis vivant !'
-    CONNECTION_SUCCESSFUL = 'Connecté en tant que {}'
+    CONNECTION_SUCCESSFUL = 'Je suis vivant ! Connecté en tant que {}'
     
     ERR_NO_COMMAND = "Cette commande n'existe pas. Tapez `&help` et je vous aiderai !"
     ERR_NO_SUBCOMMAND = EM_WARNING + "Sous-commande non valide"

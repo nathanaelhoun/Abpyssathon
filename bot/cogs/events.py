@@ -8,7 +8,6 @@ class Events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print(STR.LAUNCH_SUCCESSFUL)
         print(STR.CONNECTION_SUCCESSFUL.format(self.bot.user))
 
     @commands.Cog.listener()
