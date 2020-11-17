@@ -19,6 +19,9 @@ class Strings:
     # Function : fun.ping()
     PING = "Pong ! :ping_pong:"
 
+    # Function : fun.ping2()
+    PING2 = "Pong <@199621995913150464> ! :medhiblond: :ping_pong:"
+
     # Function : fun.activity()
     ACTIVITY_NEW = EM_OK + "Je suis maintenant en train de jouer à **{}** sur ordre de _{}_"
 
