@@ -1,0 +1,8 @@
+{
+  "name": "Abpyssathon",
+  "description": " Discordbot for my class group, written in Python",
+  "image": "heroku/python",
+  "repository": "https://github.com/nathanaelhoun/Abpyssathon",
+  "keywords": ["python", "discord" ],
+  "addons": [ "heroku-postgresql" ]
+}
