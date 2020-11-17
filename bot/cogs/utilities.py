@@ -144,28 +144,6 @@ class Utilities(commands.Cog):
         chosen_member = role.members[random.randrange(len(role.members))]
         await ctx.send(STR.RANDOM_PICKONE_SUCCESS.format(chosen_member.mention))
 
-    # Command group -----------------------------------------------------------
-    # Homework gestion
-    @commands.group()
-    async def hw(self, ctx):
-        if ctx.invoked_subcommand is None:
-            await bot.send(STR.ERR_NO_SUBCOMMAND)
-
-    @hw.command()
-    async def add(self, ctx, type: str, date: str, subject: str, label: str):
-        # TODO
-        pass
-
-    @hw.command()
-    async def show(self, ctx):
-        # TODO
-        pass
-
-    @hw.command()
-    async def remove(self, ctx, id: str):
-        # TODO
-        pass
-
 
 def setup(bot):
     bot.add_cog(Utilities(bot))
