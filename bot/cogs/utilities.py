@@ -17,69 +17,81 @@ class Utilities(commands.Cog):
         message = ctx.message
         log_file = "output-{0.id}.txt".format(message)
 
-        try:
-            with open(log_file, "w", encoding="UTF-8") as file:
-                print(
-                    STR.ARCHIVE_BEGIN.format(message.channel.name, message.guild.name)
-                )
-
-                file.write(
-                    STR.ARCHIVE_FILE_HEADER.format(
-                        message.guild.name,
-                        message.channel.name,
-                        datetime.now().strftime("%Y/%m/%d, %H:%M:%S"),
+        async with ctx.channel.typing():
+            try:
+                with open(log_file, "w", encoding="UTF-8") as file:
+                    print(
+                        STR.ARCHIVE_BEGIN.format(
+                            message.channel.name, message.guild.name
+                        )
                     )
-                )
+                    await ctx.send(STR.ARCHIVE_NOTIF_BEGIN)
 
-                async for msg in message.channel.history(limit=1000000000):
-                    time_string = msg.created_at.strftime("%Y-%m-%d %H:%M")
-                    try:
-                        author = msg.author
-                    except:
-                        author = "invalid"
-                    content = msg.clean_content
-                    try:
-                        attachment = "[Attachment : {0.attachments[0].url}]".format(msg)
-                    except IndexError:
-                        attachment = ""
-
-                    template = "[{time_str}] <{author}> {content} {attachment}\n"
                     file.write(
-                        template.format(
-                            time_str=time_string,
-                            author=author,
-                            content=content,
-                            attachment=attachment,
+                        STR.ARCHIVE_FILE_HEADER.format(
+                            message.guild.name,
+                            message.channel.name,
+                            datetime.now().strftime("%Y/%m/%d, %H:%M:%S"),
                         )
                     )
 
-                file.write(STR.ARCHIVE_FILE_FOOTER)
-                print(
-                    STR.ARCHIVE_COMPLETED.format(
-                        message.channel.name, message.guild.name
+                    async for msg in message.channel.history(limit=1000000000):
+                        time_string = msg.created_at.strftime("%Y-%m-%d %H:%M")
+                        try:
+                            author = msg.author
+                        except:
+                            author = "invalid"
+                        content = msg.clean_content
+                        try:
+                            attachment = "[Attachment : {0.attachments[0].url}]".format(
+                                msg
+                            )
+                        except IndexError:
+                            attachment = ""
+
+                        template = "[{time_str}] <{author}> {content} {attachment}\n"
+                        file.write(
+                            template.format(
+                                time_str=time_string,
+                                author=author,
+                                content=content,
+                                attachment=attachment,
+                            )
+                        )
+
+                    file.write(STR.ARCHIVE_FILE_FOOTER)
+                    print(
+                        STR.ARCHIVE_COMPLETED.format(
+                            message.channel.name, message.guild.name
+                        )
                     )
+
+                filename = STR.ARCHIVE_SEND_FILENAME.format(
+                    message.channel.name, message.guild.name
                 )
 
-            filename = STR.ARCHIVE_SEND_FILENAME.format(message.channel.name)
+                try:
+                    discord_file = discord.File(log_file, filename)
+                except Exception:
+                    message.author.send(
+                        STR.ARCHIVE_ERR_ATTACHMENT.format(message.channel.name)
+                    )
+                    return
 
-            try:
-                discord_file = discord.File(log_file, filename)
-            except Exception:
-                message.author.send(
-                    STR.ARCHIVE_ERR_ATTACHMENT.format(message.channel.name)
-                )
-                return
-
-            try:
-                await message.author.send(
-                    content=STR.ARCHIVE_SEND_SUCCESSFUL.format(message.channel.name),
-                    file=discord_file,
-                )
+                try:
+                    await message.author.send(
+                        content=STR.ARCHIVE_SEND_SUCCESSFUL.format(
+                            message.channel.name, message.guild.name
+                        ),
+                        file=discord_file,
+                    )
+                    await ctx.send(
+                        STR.ARCHIVE_SUCESSFULLY_SENT.format(ctx.author.mention)
+                    )
+                except:
+                    await message.author.send(STR.ARCHIVE_ERR_SENDING)
             except:
-                await message.author.send(STR.ARCHIVE_ERR_SENDING)
-
-        except:
-            await message.author.send(STR.ARCHIVE_ERR)
+                await message.author.send(STR.ARCHIVE_ERR)
 
         os.remove(log_file)
 
