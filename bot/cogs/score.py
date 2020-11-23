@@ -1,12 +1,14 @@
 from discord.ext import commands
 from discord import Embed as DiscordEmbed
-import math
+from psycopg2 import Error as psycopg2Error
 
 from strings import Strings as STR
 from methods import parse_mentions
 
 
 class Score(commands.Cog):
+    """Count and store in the database the score of members of each Guild"""
+
     def __init__(self, bot):
         self.bot = bot
 
@@ -23,9 +25,9 @@ class Score(commands.Cog):
         try:
             rows = self.bot.db.execute(
                 """
-                SELECT * 
-                FROM score 
-                WHERE sco_guild_id = {} 
+                SELECT *
+                FROM score
+                WHERE sco_guild_id = {}
                 """.format(
                     ctx.guild.id
                 )
@@ -64,8 +66,9 @@ class Score(commands.Cog):
             )
             await ctx.send(STR.SCORE_SHOW_RANKING_INTRO, embed=embed)
 
-        except Exception as e:
-            print(e)
+        except psycopg2Error as err:
+            print(err)
+            await ctx.send(STR.ERR_DATABASE)
 
     async def modify_points(self, ctx: commands.Context, value: int):
         """Add or remove points to guild members in the database"""
@@ -106,21 +109,24 @@ class Score(commands.Cog):
                 )
 
             await ctx.send(message)
-        except Exception as e:
-            print(e)
+
+        except psycopg2Error as err:
+            print(err)
             await ctx.send(STR.ERR_DATABASE)
 
     @score.command()
     async def add(self, ctx: commands.Context, quantity: str):
         """Add points to a guild members
 
-        You can add points to several guild members or the members of a role by tagging them in the command
+        You can add points to several guild members or the members of a role
+        by tagging them in the command
         """
 
         try:
             value = int(quantity)
-        except Exception as e:
+        except ValueError:
             await ctx.send(STR.SCORE_ADD_ERR_NAN)
+            return
 
         if value < 0:
             await ctx.send(STR.SCORE_ADD_ERR_NEGATIVE)
@@ -137,19 +143,17 @@ class Score(commands.Cog):
 
         try:
             value = int(quantity)
-        except Exception as e:
+        except ValueError:
             await ctx.send(STR.SCORE_ADD_ERR_NAN)
+            return
 
         if value < 0:
             await ctx.send(STR.SCORE_ADD_ERR_NEGATIVE)
             return
 
-        try:
-            await self.modify_points(ctx, (-value))
-            pass
-        except Exception as e:
-            print(e)
+        await self.modify_points(ctx, (-value))
 
 
 def setup(bot):
+    """Add this class to the bot"""
     bot.add_cog(Score(bot))

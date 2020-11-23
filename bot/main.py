@@ -1,8 +1,11 @@
 import os
 import asyncio
+from sys import exit as sysExit
+from psycopg2 import Error as psycopg2Error
 from dotenv import load_dotenv
-from abpyssathon import Abpyssathon as Abpyssathon
-import PostgresqlManager
+
+from postgresql_manager import PostgresqlManager
+from abpyssathon import Abpyssathon
 
 print("Loading environment variables... ", end="")
 load_dotenv()
@@ -10,13 +13,12 @@ print("done!")
 
 print("Connecting to database... ", end="")
 try:
-    db = PostgresqlManager.PostgresqlManager()
+    db = PostgresqlManager()
     db.connect(os.getenv("DATABASE_URL"))
     print("done!")
-except Exception as e:
-    print("Failed :(")
-    print(e)
-    exit(1)
+except psycopg2Error as err:
+    print("Failed :(", err)
+    sysExit(1)
 
 client = Abpyssathon(command_prefix="&", db=db)
 

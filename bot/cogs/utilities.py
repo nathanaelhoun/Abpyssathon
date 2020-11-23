@@ -1,20 +1,23 @@
-from discord.ext import commands
 from datetime import datetime
 import os
-import discord
 import random
+import discord
+from discord.ext import commands
+from discord.errors import Forbidden, HTTPException, InvalidArgument
 
 from strings import Strings as STR
 from methods import parse_mentions
 
 
 class Utilities(commands.Cog):
+    """Utility bot commands"""
+
     def __init__(self, bot):
         self.bot = bot
 
     @commands.command()
     async def archivechat(self, ctx: commands.Context):
-        """Archive a channel into a .txt file"""
+        """Archive a channel into a .txt file and sends it to the user in a DM"""
 
         message = ctx.message
         log_file = "output-{0.id}.txt".format(message)
@@ -41,7 +44,7 @@ class Utilities(commands.Cog):
                         time_string = msg.created_at.strftime("%Y-%m-%d %H:%M")
                         try:
                             author = msg.author
-                        except:
+                        except NameError:
                             author = "invalid"
                         content = msg.clean_content
                         try:
@@ -90,9 +93,14 @@ class Utilities(commands.Cog):
                     await ctx.send(
                         STR.ARCHIVE_SUCESSFULLY_SENT.format(ctx.author.mention)
                     )
-                except:
+                except Forbidden:
                     await message.author.send(STR.ARCHIVE_ERR_SENDING)
-            except:
+                except HTTPException:
+                    await message.author.send(STR.ARCHIVE_ERR_SENDING)
+                except InvalidArgument:
+                    await message.author.send(STR.ARCHIVE_ERR_SENDING)
+
+            except Exception:
                 await message.author.send(STR.ARCHIVE_ERR)
 
         os.remove(log_file)
@@ -101,15 +109,16 @@ class Utilities(commands.Cog):
     # Randomize team or picking someone
     @commands.group()
     async def random(self, ctx: commands.Context):
+        """Choose a random member or randomize teams"""
         if ctx.invoked_subcommand is None:
             await ctx.send(STR.ERR_NO_SUBCOMMAND)
 
     @random.command()
-    async def teams(self, ctx: commands.Context, numberPerTeam: int):
+    async def teams(self, ctx: commands.Context, number_per_team: int):
         """Randomize teams with the mentionned users or roles"""
 
-        if numberPerTeam < 2:
-            await ctx.send(STR.RANDOM_ERR_WRONG_NUMBER_IN_TEAM.format(numberPerTeam))
+        if number_per_team < 2:
+            await ctx.send(STR.RANDOM_ERR_WRONG_NUMBER_IN_TEAM.format(number_per_team))
             return
 
         members_to_pick = parse_mentions(ctx.message)
@@ -121,10 +130,10 @@ class Utilities(commands.Cog):
 
         while len(members_to_pick) > 0:
             new_team = list()
-            while len(new_team) < numberPerTeam and len(members_to_pick) > 0:
-                chosenMember = random.sample(members_to_pick, 1)[0]
-                members_to_pick.remove(chosenMember)
-                new_team.append(chosenMember)
+            while len(new_team) < number_per_team and len(members_to_pick) > 0:
+                chosen_member = random.sample(members_to_pick, 1)[0]
+                members_to_pick.remove(chosen_member)
+                new_team.append(chosen_member)
 
             teams.append(new_team)
 
@@ -152,7 +161,7 @@ class Utilities(commands.Cog):
 
         await ctx.send(
             STR.RANDOM_TEAMS_PERFECT.format(
-                numberPerTeam,
+                number_per_team,
                 mentions,
             ),
             embed=embed,
@@ -172,4 +181,5 @@ class Utilities(commands.Cog):
 
 
 def setup(bot):
+    """Add this class to the bot"""
     bot.add_cog(Utilities(bot))
