@@ -13,4 +13,4 @@ class Abpyssathon(commands.Bot):
             intents=intents,
         )
 
-        self.database = kwargs.pop("db")
+        self.database = kwargs.pop("database")

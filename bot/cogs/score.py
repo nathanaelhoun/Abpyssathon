@@ -23,7 +23,7 @@ class Score(commands.Cog):
         """Show the score of each member of the guild"""
 
         try:
-            rows = self.bot.db.execute(
+            rows = self.bot.database.execute(
                 """
                 SELECT *
                 FROM score
@@ -98,7 +98,7 @@ class Score(commands.Cog):
         )
 
         try:
-            self.bot.db.insert(sql)
+            self.bot.database.insert(sql)
 
             message = STR.SCORE_ADD_SUCCESSFULLY.format(
                 value, members_name, ctx.author.display_name
