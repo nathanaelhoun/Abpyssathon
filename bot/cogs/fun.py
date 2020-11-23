@@ -9,7 +9,7 @@ class Fun(commands.Cog):
         self.bot = bot
 
     @commands.command()
-    async def ping(self, ctx):
+    async def ping(self, ctx: commands.Context):
         """Answer pong to ping"""
 
         await ctx.send(STR.PING)

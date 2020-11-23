@@ -36,7 +36,7 @@ class PostgresqlManager:
     #     self._cursor.execute(sql)
     #     return self._cursor.fetchall()
 
-    def execute(self, sql):
+    def execute(self, sql: str):
         self.cursor_connect()
         cursor = (
             self._cursor
@@ -50,7 +50,7 @@ class PostgresqlManager:
         # cursor.close() # for the future
         return values
 
-    def insert(self, sql):
+    def insert(self, sql: str):
         self.cursor_connect()
         status = -1
         try:

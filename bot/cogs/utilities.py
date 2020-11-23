@@ -13,7 +13,7 @@ class Utilities(commands.Cog):
         self.bot = bot
 
     @commands.command()
-    async def archivechat(self, ctx : commands.Context):
+    async def archivechat(self, ctx: commands.Context):
         """Archive a channel into a .txt file"""
 
         message = ctx.message
@@ -100,12 +100,12 @@ class Utilities(commands.Cog):
     # Command group -----------------------------------------------------------
     # Randomize team or picking someone
     @commands.group()
-    async def random(self, ctx : commands.Context):
+    async def random(self, ctx: commands.Context):
         if ctx.invoked_subcommand is None:
             await ctx.send(STR.ERR_NO_SUBCOMMAND)
 
     @random.command()
-    async def teams(self, ctx : commands.Context, numberPerTeam: int):
+    async def teams(self, ctx: commands.Context, numberPerTeam: int):
         """Randomize teams with the mentionned users or roles"""
 
         if numberPerTeam < 2:
@@ -140,11 +140,15 @@ class Utilities(commands.Cog):
             )
 
         await ctx.send(
-            STR.RANDOM_TEAMS_PERFECT.format(numberPerTeam, ctx.message.mentions.join(' ') + ctx.message.role_mentions.join(' ')), embed=embed
+            STR.RANDOM_TEAMS_PERFECT.format(
+                numberPerTeam,
+                ctx.message.mentions.join(" ") + ctx.message.role_mentions.join(" "),
+            ),
+            embed=embed,
         )
 
     @random.command()
-    async def pickone(self, ctx : commands.Context):
+    async def pickone(self, ctx: commands.Context):
         """Pick randomly a member in a list of mentions"""
 
         members = parse_mentions(ctx.message)

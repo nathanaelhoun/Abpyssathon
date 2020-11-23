@@ -11,13 +11,13 @@ class Score(commands.Cog):
         self.bot = bot
 
     @commands.group()
-    async def score(self, ctx : commands.Context):
+    async def score(self, ctx: commands.Context):
         """Manage scores for the members of the guild"""
         if ctx.invoked_subcommand is None:
             await ctx.send(STR.ERR_NO_SUBCOMMAND)
 
     @score.command()
-    async def show(self, ctx : commands.Context):
+    async def show(self, ctx: commands.Context):
         """Show the score of each member of the guild"""
 
         try:
@@ -67,7 +67,7 @@ class Score(commands.Cog):
         except Exception as e:
             print(e)
 
-    async def modify_points(self, ctx : commands.Context, value: int):
+    async def modify_points(self, ctx: commands.Context, value: int):
         """Add or remove points to guild members in the database"""
 
         members = parse_mentions(ctx.message)
@@ -111,7 +111,7 @@ class Score(commands.Cog):
             await ctx.send(STR.ERR_DATABASE)
 
     @score.command()
-    async def add(self, ctx : commands.Context, quantity: str):
+    async def add(self, ctx: commands.Context, quantity: str):
         """Add points to a guild members
 
         You can add points to several guild members or the members of a role by tagging them in the command
@@ -129,7 +129,7 @@ class Score(commands.Cog):
         await self.modify_points(ctx, value)
 
     @score.command()
-    async def remove(self, ctx : commands.Context, quantity: str):
+    async def remove(self, ctx: commands.Context, quantity: str):
         """Remove points to a guild members
 
         Works the same way as add functions
