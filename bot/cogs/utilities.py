@@ -3,7 +3,9 @@ from datetime import datetime
 import os
 import discord
 import random
+
 from strings import Strings as STR
+from methods import parse_mentions
 
 
 class Utilities(commands.Cog):
@@ -11,7 +13,7 @@ class Utilities(commands.Cog):
         self.bot = bot
 
     @commands.command()
-    async def archivechat(self, ctx):
+    async def archivechat(self, ctx : commands.Context):
         """Archive a channel into a .txt file"""
 
         message = ctx.message
@@ -98,19 +100,19 @@ class Utilities(commands.Cog):
     # Command group -----------------------------------------------------------
     # Randomize team or picking someone
     @commands.group()
-    async def random(self, ctx):
+    async def random(self, ctx : commands.Context):
         if ctx.invoked_subcommand is None:
             await ctx.send(STR.ERR_NO_SUBCOMMAND)
 
     @random.command()
-    async def teams(self, ctx, numberPerTeam: int, role: discord.Role):
-        """Randomize teams with the members of a discordrole"""
+    async def teams(self, ctx : commands.Context, numberPerTeam: int):
+        """Randomize teams with the mentionned users or roles"""
 
         if numberPerTeam < 2:
             await ctx.send(STR.RANDOM_ERR_WRONG_NUMBER_IN_TEAM.format(numberPerTeam))
             return
 
-        members_to_pick = role.members.copy()
+        members_to_pick = parse_mentions(ctx.message)
         teams = list()
 
         while len(members_to_pick) > 0:
@@ -138,14 +140,15 @@ class Utilities(commands.Cog):
             )
 
         await ctx.send(
-            STR.RANDOM_TEAMS_PERFECT.format(numberPerTeam, role.mention), embed=embed
+            STR.RANDOM_TEAMS_PERFECT.format(numberPerTeam, ctx.message.mentions.join(' ') + ctx.message.role_mentions.join(' ')), embed=embed
         )
 
     @random.command()
-    async def pickone(self, ctx, role: discord.Role):
-        """Pick randomly a member of a role"""
+    async def pickone(self, ctx : commands.Context):
+        """Pick randomly a member in a list of mentions"""
 
-        chosen_member = role.members[random.randrange(len(role.members))]
+        members = parse_mentions(ctx.message)
+        chosen_member = members[random.randrange(len(members))]
         await ctx.send(STR.RANDOM_PICKONE_SUCCESS.format(chosen_member.mention))
 
 

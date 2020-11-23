@@ -1,7 +1,9 @@
 from discord.ext import commands
-from strings import Strings as STR
 from discord import Embed as DiscordEmbed
 import math
+
+from strings import Strings as STR
+from methods import parse_mentions
 
 
 class Score(commands.Cog):
@@ -9,13 +11,13 @@ class Score(commands.Cog):
         self.bot = bot
 
     @commands.group()
-    async def score(self, ctx):
+    async def score(self, ctx : commands.Context):
         """Manage scores for the members of the guild"""
         if ctx.invoked_subcommand is None:
             await ctx.send(STR.ERR_NO_SUBCOMMAND)
 
     @score.command()
-    async def show(self, ctx):
+    async def show(self, ctx : commands.Context):
         """Show the score of each member of the guild"""
 
         try:
@@ -65,20 +67,13 @@ class Score(commands.Cog):
         except Exception as e:
             print(e)
 
-    async def modify_points(self, ctx, value: int):
+    async def modify_points(self, ctx : commands.Context, value: int):
         """Add or remove points to guild members in the database"""
 
-        members = set()
-        if len(ctx.message.mentions) == 0 and len(ctx.message.role_mentions) == 0:
+        members = parse_mentions(ctx.message)
+        if len(members) == 0:
             await ctx.send(STR.ERR_MISSING_REQUIRED_ARGUMENT)
             return
-
-        for member in ctx.message.mentions:
-            members.add(member)
-
-        for role in ctx.message.role_mentions:
-            for member in role.members:
-                members.add(member)
 
         values_sql = ""
         members_name = ""
@@ -116,7 +111,7 @@ class Score(commands.Cog):
             await ctx.send(STR.ERR_DATABASE)
 
     @score.command()
-    async def add(self, ctx, quantity: str):
+    async def add(self, ctx : commands.Context, quantity: str):
         """Add points to a guild members
 
         You can add points to several guild members or the members of a role by tagging them in the command
@@ -134,7 +129,7 @@ class Score(commands.Cog):
         await self.modify_points(ctx, value)
 
     @score.command()
-    async def remove(self, ctx, quantity: str):
+    async def remove(self, ctx : commands.Context, quantity: str):
         """Remove points to a guild members
 
         Works the same way as add functions

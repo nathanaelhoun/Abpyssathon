@@ -1,6 +1,7 @@
 from discord.ext import commands
-from strings import Strings as STR
 import discord
+
+from strings import Strings as STR
 
 
 class Fun(commands.Cog):
@@ -14,13 +15,13 @@ class Fun(commands.Cog):
         await ctx.send(STR.PING)
 
     @commands.command()
-    async def ping2(self, ctx):
+    async def ping2(self, ctx: commands.Context):
         """Answer pong to ping and tag the best user of the server (Medhi)"""
 
         await ctx.send(STR.PING2)
 
     @commands.command()
-    async def activity(self, ctx, newActivity: str):
+    async def activity(self, ctx: commands.Context, newActivity: str):
         """Set a new activity for the bot"""
 
         # TODO : Check if admin

@@ -1,6 +1,8 @@
 from discord.ext import commands
 import discord
+
 from strings import Strings as STR
+
 
 class Events(commands.Cog):
     def __init__(self, bot):
@@ -11,12 +13,12 @@ class Events(commands.Cog):
         print(STR.CONNECTION_SUCCESSFUL.format(self.bot.user))
 
     @commands.Cog.listener()
-    async def on_message(self, ctx):
+    async def on_message(self, ctx: commands.Context):
         if isinstance(ctx.channel, discord.DMChannel) and not ctx.author.bot:
             await ctx.channel.send(STR.ERR_PRIVATE_CHANNEL)
 
     @commands.Cog.listener()
-    async def on_command_error(self, ctx, error):
+    async def on_command_error(self, ctx: commands.Context, error):
         if isinstance(error, commands.NoPrivateMessage):
             await ctx.send(STR.ERR_PRIVATE_CHANNEL)
 
