@@ -1,7 +1,7 @@
-from discord import Message
+from discord import Message as discordMessage
 
 
-def parse_mentions(message: discord.Message):
+def parse_mentions(message: discordMessage):
     members = set()
 
     for member in message.mentions:

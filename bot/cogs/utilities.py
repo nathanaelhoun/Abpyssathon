@@ -113,14 +113,18 @@ class Utilities(commands.Cog):
             return
 
         members_to_pick = parse_mentions(ctx.message)
+        if len(members_to_pick) == 0:
+            await ctx.send(STR.ERR_MISSING_REQUIRED_ARGUMENT)
+            return
+
         teams = list()
 
         while len(members_to_pick) > 0:
             new_team = list()
             while len(new_team) < numberPerTeam and len(members_to_pick) > 0:
-                new_team.append(
-                    members_to_pick.pop(random.randrange(len(members_to_pick)))
-                )
+                chosenMember = random.sample(members_to_pick, 1)[0]
+                members_to_pick.remove(chosenMember)
+                new_team.append(chosenMember)
 
             teams.append(new_team)
 
@@ -139,10 +143,17 @@ class Utilities(commands.Cog):
                 value=team_string,
             )
 
+        mentions = ""
+        for user in ctx.message.mentions:
+            mentions += user.mention + " "
+
+        for role in ctx.message.role_mentions:
+            mentions += role.mention + " "
+
         await ctx.send(
             STR.RANDOM_TEAMS_PERFECT.format(
                 numberPerTeam,
-                ctx.message.mentions.join(" ") + ctx.message.role_mentions.join(" "),
+                mentions,
             ),
             embed=embed,
         )
@@ -152,7 +163,11 @@ class Utilities(commands.Cog):
         """Pick randomly a member in a list of mentions"""
 
         members = parse_mentions(ctx.message)
-        chosen_member = members[random.randrange(len(members))]
+        if len(members) == 0:
+            await ctx.send(STR.ERR_MISSING_REQUIRED_ARGUMENT)
+            return
+
+        chosen_member = random.sample(members, 1)[0]
         await ctx.send(STR.RANDOM_PICKONE_SUCCESS.format(chosen_member.mention))
 
 

@@ -132,7 +132,7 @@ class Score(commands.Cog):
     async def remove(self, ctx: commands.Context, quantity: str):
         """Remove points to a guild members
 
-        Works the same way as add functions
+        Works the same way as add function
         """
 
         try:
