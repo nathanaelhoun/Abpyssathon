@@ -28,6 +28,7 @@ class Score(commands.Cog):
                 SELECT *
                 FROM score
                 WHERE sco_guild_id = {}
+                ORDER BY sco_value DESC
                 """.format(
                     ctx.guild.id
                 )

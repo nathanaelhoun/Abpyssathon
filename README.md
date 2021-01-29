@@ -46,6 +46,8 @@ Otherwise you can deploy it by yourself:
 
   ```bash
   $ sudo apt install python3 python3-pip virtual-env
+  # or
+  $ sudo pacman -S python python-pip python-virtualenv
   ```
 
 - Python requirements
