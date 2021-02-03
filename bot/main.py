@@ -31,6 +31,7 @@ print("done!")
 
 print("Ready to launch client. ", end="")
 print("Running client...")
+
 try:
     client.run(os.getenv("BOT_TOKEN"))
 finally:
@@ -41,3 +42,5 @@ finally:
     print("Disconnecting from database... ", end="")
     db.disconnect()
     print("done! ")
+
+    print("Goodbye!")
