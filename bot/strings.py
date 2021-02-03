@@ -1,5 +1,20 @@
 # pylint: disable=R
 
+
+class Pluralizer:
+    """Simple pluralization of a string. Use with .format and {:N point/s}"""
+
+    def __init__(self, value):
+        self.value = value
+
+    def __format__(self, formatter):
+        formatter = formatter.replace("N", str(self.value))
+        start, _, suffixes = formatter.partition("/")
+        singular, _, plural = suffixes.rpartition("/")
+
+        return "{}{}".format(start, singular if abs(self.value) < 2 else plural)
+
+
 class Strings:
     """Strings used in the message sent"""
 
@@ -63,7 +78,7 @@ class Strings:
     # Commands group : utilities.random()
     RANDOM_ERR_WRONG_NUMBER_IN_TEAM = (
         EM_WARNING
-        + "Tu crois vraiment qu'on va faire des équipes avec **{}** personne dans chaque ? :P "
+        + "Tu crois vraiment qu'on va faire des équipes avec **{:N personne/s}** dans chaque ? :P "
     )
 
     RANDOM_TEAMS_PERFECT = (
@@ -74,11 +89,6 @@ class Strings:
     RANDOM_PICKONE_SUCCESS = "Et l'élu est {} !"
 
     # Commands group : score()
-    CAT_NO_CAT = "Il n'y a pas de catégories enregistrées sur ce serveur !"
-    CAT_LIST_INTRO = EM_OK + "Voici la liste des catégories pour ce serveur :"
-    CAT_LIST_ITEM = "- {}"
-    CAT_ADD_SUCCESS = "Ajout de la catégorie de score **{}** réalisée avec succès !"
-
     SCORE_ADD_ERR_NAN = EM_FATAL_ERROR + "Ceci n'est pas un nombre de point"
     SCORE_ADD_ERR_NEGATIVE = (
         EM_FATAL_ERROR + "Impossible d'ajouter un nombre négatif de point"
@@ -87,13 +97,13 @@ class Strings:
         EM_FATAL_ERROR + "Impossible de retirer un nombre positif de point"
     )
     SCORE_ADD_SUCCESSFULLY = (
-        EM_SUCCESS + "J'ai bien rajouté {} points à **{}** sur ordre de _{}_."
+        EM_SUCCESS + "J'ai bien rajouté {:N point/s} à **{}** sur ordre de _{}_."
     )
     SCORE_REMOVE_SUCCESSFULLY = (
-        EM_SUCCESS + "J'ai bien retiré {} points à **{}** sur ordre de _{}_."
+        EM_SUCCESS + "J'ai bien retiré {:N point/s} à **{}** sur ordre de _{}_."
     )
 
     SCORE_SHOW_NO_POINTS = "Rien à afficher. Vous êtes tous des élèves sages. :scream: "
     SCORE_SHOW_RANKING_INTRO = ":trophy: Et voici le classement des points de int "
-    SCORE_SHOW_RANKING_ITEM = "#{} : {} ({} points)"
+    SCORE_SHOW_RANKING_ITEM = "#{} : {} ({:N point/s})"
     SCORE_SHOW_MEMBER_HAS_LEFT = "*a quitté le serveur*"

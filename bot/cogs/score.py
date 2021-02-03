@@ -3,6 +3,7 @@ from discord import Embed as DiscordEmbed
 from psycopg2 import Error as psycopg2Error
 
 from strings import Strings as STR
+from strings import Pluralizer
 from methods import parse_mentions
 
 
@@ -58,7 +59,7 @@ class Score(commands.Cog):
                     i += 1
 
                 result_string += "\n" + STR.SCORE_SHOW_RANKING_ITEM.format(
-                    i, member_name, row[2]
+                    i, member_name, Pluralizer(row[2])
                 )
 
             embed = DiscordEmbed(
@@ -102,11 +103,11 @@ class Score(commands.Cog):
             self.bot.database.insert(sql)
 
             message = STR.SCORE_ADD_SUCCESSFULLY.format(
-                value, members_name, ctx.author.display_name
+                Pluralizer(value), members_name, ctx.author.display_name
             )
             if value < 0:
                 message = STR.SCORE_REMOVE_SUCCESSFULLY.format(
-                    -value, members_name, ctx.author.display_name
+                    Pluralizer(-value), members_name, ctx.author.display_name
                 )
 
             await ctx.send(message)

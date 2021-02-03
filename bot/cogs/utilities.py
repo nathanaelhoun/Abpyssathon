@@ -6,6 +6,7 @@ from discord.ext import commands
 from discord.errors import Forbidden, HTTPException, InvalidArgument
 
 from strings import Strings as STR
+from strings import Pluralizer
 from methods import parse_mentions
 
 
@@ -118,7 +119,7 @@ class Utilities(commands.Cog):
         """Randomize teams with the mentionned users or roles"""
 
         if number_per_team < 2:
-            await ctx.send(STR.RANDOM_ERR_WRONG_NUMBER_IN_TEAM.format(number_per_team))
+            await ctx.send(STR.RANDOM_ERR_WRONG_NUMBER_IN_TEAM.format(Pluralizer(number_per_team)))
             return
 
         members_to_pick = parse_mentions(ctx.message)
