@@ -12,7 +12,8 @@ class Events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        """Print that we are connected"""
+        """Restore bot activity"""
+
         print("I'm alive! Connected as {}.".format(self.bot.user))
 
         print("Restoring bot activity... ", end="")
@@ -40,6 +41,7 @@ class Events(commands.Cog):
     @commands.Cog.listener()
     async def on_command_error(self, ctx: commands.Context, error):
         """Send a message when a common command error is detected"""
+
         if isinstance(error, commands.NoPrivateMessage):
             await ctx.send(STR.ERR_PRIVATE_CHANNEL)
 

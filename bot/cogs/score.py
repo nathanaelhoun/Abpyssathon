@@ -16,6 +16,7 @@ class Score(commands.Cog):
     @commands.group()
     async def score(self, ctx: commands.Context):
         """Manage scores for the members of the guild"""
+
         if ctx.invoked_subcommand is None:
             await ctx.send(STR.ERR_NO_SUBCOMMAND)
 
