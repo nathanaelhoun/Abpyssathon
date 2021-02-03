@@ -117,12 +117,15 @@ class Score(commands.Cog):
             await ctx.send(STR.ERR_DATABASE)
 
     @score.command()
-    async def add(self, ctx: commands.Context, quantity: str):
+    async def add(
+        self, ctx: commands.Context, quantity: str, mentions: str
+    ):  # pylint: disable=unused-argument
         """Add points to a guild members
 
         You can add points to several guild members or the members of a role
         by tagging them in the command
         """
+        # mentions argument is used to the &help generation
 
         try:
             value = int(quantity)

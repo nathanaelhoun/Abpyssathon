@@ -115,8 +115,9 @@ class Utilities(commands.Cog):
             await ctx.send(STR.ERR_NO_SUBCOMMAND)
 
     @random.command()
-    async def teams(self, ctx: commands.Context, number_per_team: int):
+    async def teams(self, ctx: commands.Context, number_per_team: int, mentions: str):
         """Randomize teams with the mentionned users or roles"""
+        # mentions argument is used to the &help generation
 
         if number_per_team < 2:
             await ctx.send(STR.RANDOM_ERR_WRONG_NUMBER_IN_TEAM.format(Pluralizer(number_per_team)))
