@@ -26,12 +26,20 @@ class Fun(commands.Cog):
     async def activity(self, ctx: commands.Context, new_activity: str):
         """Set a new activity for the bot"""
 
-        # TODO : Check if admin
         game = discord.Game(new_activity)
         await self.bot.change_presence(status=discord.Status.online, activity=game)
         await ctx.send(STR.ACTIVITY_NEW.format(new_activity, ctx.message.author))
 
+        sql = """
+        INSERT INTO system VALUES
+        ('activity', %s)
+        ON CONFLICT (key) 
+        DO UPDATE SET value = EXCLUDED.value;
+        """
+        self.bot.database.insert(sql, (new_activity,))
+
 
 def setup(bot):
     """Add this class to the bot"""
+
     bot.add_cog(Fun(bot))

@@ -59,12 +59,13 @@ class PostgresqlManager:
         # cursor.close() # for the future
         return values
 
-    def insert(self, sql: str):
+    def insert(self, sql: str, params=None):
         """Execute an insert sql query and return the status"""
+
         self.cursor_connect()
         status = -1
         try:
-            status = self._cursor.execute(sql)
+            status = self._cursor.execute(sql, params)
         except psycopg2.Error as err:
             print(err)
 

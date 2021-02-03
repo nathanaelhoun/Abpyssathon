@@ -13,8 +13,23 @@ class Events(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         """Print that we are connected"""
-        # TODO :  and set a bot activity
-        print(STR.CONNECTION_SUCCESSFUL.format(self.bot.user))
+        print("I'm alive! Connected as {}.".format(self.bot.user))
+
+        print("Restoring bot activity... ", end="")
+        rows = self.bot.database.execute(
+            """
+            SELECT value
+            FROM system
+            WHERE key = 'activity';
+            """
+        )
+
+        if len(rows) == 0:
+            print("No bot activity found.")
+        else:
+            game = discord.Game(rows[0][0])
+            await self.bot.change_presence(status=discord.Status.online, activity=game)
+            print("Restored '{}'.".format(rows[0][0]))
 
     @commands.Cog.listener()
     async def on_message(self, ctx: commands.Context):
