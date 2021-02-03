@@ -84,27 +84,30 @@ class Score(commands.Cog):
             await ctx.send(STR.ERR_MISSING_REQUIRED_ARGUMENT)
             return
 
-        values_sql = ""
-        members_name = ""
-        for member in members:
-            if members_name != "":
-                values_sql += ", "
-                members_name += ", "
-
-            values_sql += "({}, {}, {})".format(ctx.guild.id, member.id, value)
-            members_name += member.display_name
-
         sql = """
         INSERT INTO score VALUES
-        {}
+        """
+        data_sql = []
+        members_name = ""
+
+        for member in members:
+            if members_name != "":
+                sql += ", "
+                members_name += ", "
+
+            sql += "(%s, %s, %s) "
+            data_sql.append(ctx.guild.id)
+            data_sql.append(member.id)
+            data_sql.append(value)
+            members_name += member.display_name
+
+        sql += """
         ON CONFLICT (sco_guild_id, sco_member_id) 
         DO UPDATE SET sco_value = score.sco_value + EXCLUDED.sco_value;
-        """.format(
-            values_sql
-        )
+        """
 
         try:
-            self.bot.database.insert(sql)
+            self.bot.database.insert(sql, data_sql)
 
             message = STR.SCORE_ADD_SUCCESSFULLY.format(
                 Pluralizer(value), members_name, ctx.author.display_name
