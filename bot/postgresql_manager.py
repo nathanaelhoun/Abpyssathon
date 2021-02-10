@@ -1,3 +1,4 @@
+import sys
 import psycopg2
 
 
@@ -29,21 +30,6 @@ class PostgresqlManager:
         if hasattr(self, "_conn") and self._conn is not None:
             self._conn.close()
 
-    # def select(self, select : str, from_tables : str, where : str, end_of_sql_request : str ):
-    #     if where == "":
-    #         where = "TRUE"
-
-    #     sql = ("SELECT " + select +
-    #     " FROM " + from_tables +
-    #     " WHERE " + where +
-    #     end_of_sql_request
-    #     )
-    #     # add the 'server id' field
-
-    #     self.cursor_connect()
-    #     self._cursor.execute(sql)
-    #     return self._cursor.fetchall()
-
     def execute(self, sql: str):
         """Execute a sql query and return the response"""
         self.cursor_connect()
@@ -53,7 +39,7 @@ class PostgresqlManager:
         try:
             cursor.execute(sql)
         except psycopg2.Error as err:
-            print(err)
+            print(err, file=sys.stderr)
 
         values = cursor.fetchall()
         # cursor.close() # for the future
@@ -67,7 +53,7 @@ class PostgresqlManager:
         try:
             status = self._cursor.execute(sql, params)
         except psycopg2.Error as err:
-            print(err)
+            print(err, file=sys.stderr)
 
         self._conn.commit()
         return status

@@ -52,8 +52,6 @@ class Roles(commands.Cog):
         except InvalidArgument as err:
             await ctx.send(STR.CREATEROLE_INVALID_ARG)
             print(err)
-        except err:
-            print(err)
 
         if role is None:
             return
@@ -69,8 +67,6 @@ class Roles(commands.Cog):
             print(err)
         except HTTPException as err:
             await ctx.send(STR.CREATEROLE_ERR_HTTP)
-            print(err)
-        except err:
             print(err)
 
         await ctx.send(

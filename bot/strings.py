@@ -60,11 +60,9 @@ class Strings:
     ARCHIVE_FILE_FOOTER = "Archive end\n"
     ARCHIVE_COMPLETED = "--- Archive of #{} (guild : {}) completed"
 
-    ARCHIVE_SUCESSFULLY_SENT = (
-        EM_OK + "Archive du channel bien envoyée par message privé à {}"
-    )
-    ARCHIVE_SEND_SUCCESSFUL = EM_OK + "Archive du channel #{} (Serveur {})"
-    ARCHIVE_SEND_FILENAME = "Archive-channel-{}-of-{}.txt"
+    ARCHIVE_SUCCESS = EM_OK + "Archive du channel bien envoyée par message privé à {}"
+    ARCHIVE_MESSAGE = EM_OK + "Archive du channel #{} (Serveur {})"
+    ARCHIVE_FILENAME = "Archive-channel-{}-of-{}.txt"
 
     ARCHIVE_ERR_SENDING = EM_FATAL + "Impossible d'envoyer l'archive :sob:"
 
@@ -76,19 +74,17 @@ class Strings:
     CREATEROLE_ERR_HTTP = EM_FATAL + "Je n'ai pas réussi à créer le rôle... :cry:"
     CREATEROLE_INVALID_ARG = EM_FATAL + "Hum, un de ces arguments ne convient pas..."
     CREATEROLE_ERR_ADDED = (
-        EM_WARN + "Le rôle n'a pas été ajouté à tous les membres demandés."
+        EM_WARN + "Le rôle n'a pas été ajouté à tous les membres demandés, déso."
     )
     CREATEROLE_ERR_EXISTING = EM_WARN + "Le rôle {} existe déjà, la preuve!"
 
     # Commands group : utilities.random()
-    RANDOM_ERR_WRONG_NUMBER_IN_TEAM = (
+    RANDOM_ERR_WRONG_NB_PER_TEAM = (
         EM_WARN
         + "Tu crois vraiment qu'on va faire des équipes avec **{:N personne/s}** dans chaque ? :P "
     )
 
-    RANDOM_TEAMS_PERFECT = (
-        EM_SUCCESS + "J'ai constitué des groupes de {} avec le rôle {}"
-    )
+    RANDOM_TEAMS_PERFECT = EM_SUCCESS + "J'ai constitué des groupes de {} avec {}"
     RANDOM_TEAMS_TEAM_LABEL = ":game_die: Équipe {} :"
     RANDOM_TEAMS_MEMBER_LABEL = ":white_medium_small_square: {}"
     RANDOM_PICKONE_SUCCESS = "Et l'élu est {} !"
@@ -101,14 +97,14 @@ class Strings:
     SCORE_ADD_ERR_POSITIVE = (
         EM_FATAL + "Impossible de retirer un nombre positif de point"
     )
-    SCORE_ADD_SUCCESSFULLY = (
+    SCORE_ADD_SUCCESS = (
         EM_SUCCESS + "J'ai bien rajouté {:N point/s} à **{}** sur ordre de _{}_."
     )
-    SCORE_REMOVE_SUCCESSFULLY = (
+    SCORE_REMOVE_SUCCESS = (
         EM_SUCCESS + "J'ai bien retiré {:N point/s} à **{}** sur ordre de _{}_."
     )
 
     SCORE_SHOW_NO_POINTS = "Rien à afficher. Vous êtes tous des élèves sages. :scream: "
-    SCORE_SHOW_RANKING_INTRO = ":trophy: Et voici le classement des points de int "
+    SCORE_SHOW_RANKING_INTRO = ":trophy: Et voici le classement des points de int :"
     SCORE_SHOW_RANKING_ITEM = "#{} : {} ({:N point/s})"
     SCORE_SHOW_MEMBER_HAS_LEFT = "*a quitté le serveur*"
