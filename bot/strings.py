@@ -66,17 +66,24 @@ class Strings:
 
     ARCHIVE_ERR_SENDING = EM_FATAL + "Impossible d'envoyer l'archive :sob:"
 
-    # Function : utitilies.createrole()
-    CREATEROLE_SUCCESS = EM_SUCCESS + "Nouveau rôle *{}* créé par _{}_ et ajouté à *{}*"
-    CREATEROLE_ERR_PERMISSION = (
+    # Command groupe : roles()
+    ROLE_CREATE_SUCCESS = (
+        EM_SUCCESS + "Nouveau rôle *{}* créé par _{}_ et ajouté à *{}*"
+    )
+    ROLE_CREATE_ERR_PERMISSION = (
         EM_FATAL + "Je n'ai pas les permissions pour créer un rôle :sob:"
     )
-    CREATEROLE_ERR_HTTP = EM_FATAL + "Je n'ai pas réussi à créer le rôle... :cry:"
-    CREATEROLE_INVALID_ARG = EM_FATAL + "Hum, un de ces arguments ne convient pas..."
-    CREATEROLE_ERR_ADDED = (
+    ROLE_CREATE_ERR_HTTP = EM_FATAL + "Je n'ai pas réussi à créer le rôle... :cry:"
+    ROLE_CREATE_INVALID_ARG = EM_FATAL + "Hum, un de ces arguments ne convient pas..."
+    ROLE_CREATE_ERR_ADDED = (
         EM_WARN + "Le rôle n'a pas été ajouté à tous les membres demandés, déso."
     )
-    CREATEROLE_ERR_EXISTING = EM_WARN + "Le rôle {} existe déjà, la preuve!"
+    ROLE_CREATE_ERR_EXISTING = EM_WARN + "Le rôle {} existe déjà, la preuve!"
+
+
+    ROLE_SHOW_INTRO = ":label: Il y a un total de {:N rôle/s} sur ce serveur !"
+    ROLE_SHOW_ITEM = "- {} ({:N rôle/s})"
+
 
     # Commands group : utilities.random()
     RANDOM_ERR_WRONG_NB_PER_TEAM = (

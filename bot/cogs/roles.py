@@ -2,7 +2,7 @@ from discord.ext import commands
 import discord
 from discord.errors import Forbidden, HTTPException, InvalidArgument
 
-from strings import Strings as STR
+from strings import Pluralizer, Strings as STR
 from utils import parse_mentions
 
 
@@ -33,7 +33,7 @@ class Roles(commands.Cog):
 
         role = discord.utils.get(ctx.message.author.guild.roles, name=role_name)
         if role is not None:
-            await ctx.send(STR.CREATEROLE_ERR_EXISTING.format(role.mention))
+            await ctx.send(STR.ROLE_CREATE_ERR_EXISTING.format(role.mention))
             return
 
         try:
@@ -44,13 +44,13 @@ class Roles(commands.Cog):
                 colour=discord.Colour.random(),
             )
         except Forbidden as err:
-            await ctx.send(STR.CREATEROLE_ERR_PERMISSION)
+            await ctx.send(STR.ROLE_CREATE_ERR_PERMISSION)
             print(err)
         except HTTPException as err:
-            await ctx.send(STR.CREATEROLE_ERR_HTTP)
+            await ctx.send(STR.ROLE_CREATE_ERR_HTTP)
             print(err)
         except InvalidArgument as err:
-            await ctx.send(STR.CREATEROLE_INVALID_ARG)
+            await ctx.send(STR.ROLE_CREATE_INVALID_ARG)
             print(err)
 
         if role is None:
@@ -63,20 +63,37 @@ class Roles(commands.Cog):
                 await member.add_roles(role, atomic=True)
                 member_names.append(member.display_name)
         except Forbidden as err:
-            await ctx.send(STR.CREATEROLE_ERR_PERMISSION)
+            await ctx.send(STR.ROLE_CREATE_ERR_PERMISSION)
             print(err)
         except HTTPException as err:
-            await ctx.send(STR.CREATEROLE_ERR_HTTP)
+            await ctx.send(STR.ROLE_CREATE_ERR_HTTP)
             print(err)
 
         await ctx.send(
-            STR.CREATEROLE_SUCCESS.format(
+            STR.ROLE_CREATE_SUCCESS.format(
                 role.mention, ctx.author.display_name, ", ".join(member_names)
             )
         )
 
         if len(member_names) != len(members):
-            await ctx.send(STR.CREATEROLE_ERR_ADDED)
+            await ctx.send(STR.ROLE_CREATE_ERR_ADDED)
+
+    @roles.command()
+    async def show(self, ctx: commands.Context):
+        """Show the number of roles of each member of the guild"""
+
+        members = sorted(ctx.guild.members, key=lambda x: len(x.roles), reverse=True)
+
+        embed = discord.Embed(
+            description="\n".join(
+                STR.ROLE_SHOW_ITEM.format(m.display_name, Pluralizer(len(m.roles)))
+                for m in members
+            ),
+        )
+
+        await ctx.send(
+            STR.ROLE_SHOW_INTRO.format(Pluralizer(len(ctx.guild.roles))), embed=embed
+        )
 
 
 def setup(bot):
