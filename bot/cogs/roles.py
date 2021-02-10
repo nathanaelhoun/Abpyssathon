@@ -84,15 +84,26 @@ class Roles(commands.Cog):
 
         members = sorted(ctx.guild.members, key=lambda x: len(x.roles), reverse=True)
 
+        description = STR.ROLE_SHOW_INTRO
+        for member in members:
+            unique_roles_nb = sum(len(r.members) == 1 for r in member.roles)
+
+            description += (
+                STR.ROLE_SHOW_ITEM.format(
+                    member.display_name,
+                    len(member.roles) - 1,
+                    unique_roles_nb,
+                )
+                + "\n"
+            )
+
         embed = discord.Embed(
-            description="\n".join(
-                STR.ROLE_SHOW_ITEM.format(m.display_name, Pluralizer(len(m.roles)))
-                for m in members
-            ),
+            description="```\n" + description + "\n```",
         )
 
         await ctx.send(
-            STR.ROLE_SHOW_INTRO.format(Pluralizer(len(ctx.guild.roles))), embed=embed
+            STR.ROLE_SHOW_TEXT.format(Pluralizer(len(ctx.guild.roles))),
+            embed=embed,
         )
 
 

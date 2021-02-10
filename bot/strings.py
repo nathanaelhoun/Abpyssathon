@@ -80,10 +80,14 @@ class Strings:
     )
     ROLE_CREATE_ERR_EXISTING = EM_WARN + "Le rôle {} existe déjà, la preuve!"
 
-
-    ROLE_SHOW_INTRO = ":label: Il y a un total de {:N rôle/s} sur ce serveur !"
-    ROLE_SHOW_ITEM = "- {} ({:N rôle/s})"
-
+    ROLE_SHOW_TEXT = ":label: Il y a un total de {:N rôle/s} sur ce serveur !"
+    ROLE_SHOW_INTRO = (
+        ""
+        + "|==============================|=======|=======|\n"
+        + "|             Nom              | Total |Uniques|\n"
+        + "|==============================|=======|=======|\n"
+    )
+    ROLE_SHOW_ITEM = "|{:30s}|{:7d}|{:7d}|"
 
     # Commands group : utilities.random()
     RANDOM_ERR_WRONG_NB_PER_TEAM = (
