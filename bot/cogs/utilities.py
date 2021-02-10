@@ -101,7 +101,8 @@ class Utilities(commands.Cog):
                 except InvalidArgument:
                     await message.author.send(STR.ARCHIVE_ERR_SENDING)
 
-            except Exception:
+            except Exception as err:
+                print(err)
                 await message.author.send(STR.ARCHIVE_ERR)
 
         os.remove(log_file)
@@ -120,7 +121,9 @@ class Utilities(commands.Cog):
         # mentions argument is used to the &help generation
 
         if number_per_team < 2:
-            await ctx.send(STR.RANDOM_ERR_WRONG_NUMBER_IN_TEAM.format(Pluralizer(number_per_team)))
+            await ctx.send(
+                STR.RANDOM_ERR_WRONG_NUMBER_IN_TEAM.format(Pluralizer(number_per_team))
+            )
             return
 
         members_to_pick = parse_mentions(ctx.message)

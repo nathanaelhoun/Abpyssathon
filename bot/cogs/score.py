@@ -83,23 +83,19 @@ class Score(commands.Cog):
         if len(members) == 0:
             await ctx.send(STR.ERR_MISSING_REQUIRED_ARGUMENT)
             return
-
         sql = """
         INSERT INTO score VALUES
         """
         data_sql = []
-        members_name = ""
 
-        for member in members:
-            if members_name != "":
+        for i, member in enumerate(members):
+            if i != 0:
                 sql += ", "
-                members_name += ", "
 
             sql += "(%s, %s, %s) "
             data_sql.append(ctx.guild.id)
             data_sql.append(member.id)
             data_sql.append(value)
-            members_name += member.display_name
 
         sql += """
         ON CONFLICT (sco_guild_id, sco_member_id) 
@@ -108,16 +104,18 @@ class Score(commands.Cog):
 
         try:
             self.bot.database.insert(sql, data_sql)
-
-            message = STR.SCORE_ADD_SUCCESSFULLY.format(
-                Pluralizer(value), members_name, ctx.author.display_name
-            )
+            message = STR.SCORE_ADD_SUCCESSFULLY
             if value < 0:
-                message = STR.SCORE_REMOVE_SUCCESSFULLY.format(
-                    Pluralizer(-value), members_name, ctx.author.display_name
-                )
+                message = STR.SCORE_REMOVE_SUCCESSFULLY
+                value = -value
 
-            await ctx.send(message)
+            await ctx.send(
+                message.format(
+                    Pluralizer(value),
+                    ", ".join(m.display_name for m in members),
+                    ctx.author.display_name,
+                )
+            )
 
         except psycopg2Error as err:
             print(err)
