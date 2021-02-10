@@ -4,7 +4,7 @@ from psycopg2 import Error as psycopg2Error
 
 from strings import Strings as STR
 from strings import Pluralizer
-from methods import parse_mentions
+from utils import parse_mentions
 
 
 class Score(commands.Cog):

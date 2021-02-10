@@ -3,7 +3,7 @@ import discord
 from discord.errors import Forbidden, HTTPException, InvalidArgument
 
 from strings import Strings as STR
-from methods import parse_mentions
+from utils import parse_mentions
 
 
 class Roles(commands.Cog):

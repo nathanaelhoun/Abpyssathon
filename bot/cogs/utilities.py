@@ -7,7 +7,7 @@ from discord.errors import Forbidden, HTTPException, InvalidArgument
 
 from strings import Strings as STR
 from strings import Pluralizer
-from methods import parse_mentions
+from utils import parse_mentions
 
 
 class Utilities(commands.Cog):
@@ -24,86 +24,65 @@ class Utilities(commands.Cog):
         log_file = "output-{0.id}.txt".format(message)
 
         async with ctx.channel.typing():
-            try:
-                with open(log_file, "w", encoding="UTF-8") as file:
-                    print(
-                        STR.ARCHIVE_BEGIN.format(
-                            message.channel.name, message.guild.name
-                        )
+
+            with open(log_file, "w", encoding="UTF-8") as file:
+                print(
+                    STR.ARCHIVE_BEGIN.format(message.channel.name, message.guild.name)
+                )
+                await ctx.send(STR.ARCHIVE_NOTIF_BEGIN)
+
+                file.write(
+                    STR.ARCHIVE_FILE_HEADER.format(
+                        message.guild.name,
+                        message.channel.name,
+                        datetime.now().strftime("%Y/%m/%d, %H:%M:%S"),
                     )
-                    await ctx.send(STR.ARCHIVE_NOTIF_BEGIN)
-
-                    file.write(
-                        STR.ARCHIVE_FILE_HEADER.format(
-                            message.guild.name,
-                            message.channel.name,
-                            datetime.now().strftime("%Y/%m/%d, %H:%M:%S"),
-                        )
-                    )
-
-                    async for msg in message.channel.history(limit=1000000000):
-                        time_string = msg.created_at.strftime("%Y-%m-%d %H:%M")
-                        try:
-                            author = msg.author
-                        except NameError:
-                            author = "invalid"
-                        content = msg.clean_content
-                        try:
-                            attachment = "[Attachment : {0.attachments[0].url}]".format(
-                                msg
-                            )
-                        except IndexError:
-                            attachment = ""
-
-                        template = "[{time_str}] <{author}> {content} {attachment}\n"
-                        file.write(
-                            template.format(
-                                time_str=time_string,
-                                author=author,
-                                content=content,
-                                attachment=attachment,
-                            )
-                        )
-
-                    file.write(STR.ARCHIVE_FILE_FOOTER)
-                    print(
-                        STR.ARCHIVE_COMPLETED.format(
-                            message.channel.name, message.guild.name
-                        )
-                    )
-
-                filename = STR.ARCHIVE_SEND_FILENAME.format(
-                    message.channel.name, message.guild.name
                 )
 
-                try:
-                    discord_file = discord.File(log_file, filename)
-                except Exception:
-                    message.author.send(
-                        STR.ARCHIVE_ERR_ATTACHMENT.format(message.channel.name)
-                    )
-                    return
+                async for msg in message.channel.history(limit=1000000000):
+                    time_string = msg.created_at.strftime("%Y-%m-%d %H:%M")
+                    try:
+                        author = msg.author
+                    except NameError:
+                        author = "invalid"
+                    content = msg.clean_content
+                    try:
+                        attachment = "[Attachment : {0.attachments[0].url}]".format(msg)
+                    except IndexError:
+                        attachment = ""
 
-                try:
-                    await message.author.send(
-                        content=STR.ARCHIVE_SEND_SUCCESSFUL.format(
-                            message.channel.name, message.guild.name
-                        ),
-                        file=discord_file,
+                    template = "[{time_str}] <{author}> {content} {attachment}\n"
+                    file.write(
+                        template.format(
+                            time_str=time_string,
+                            author=author,
+                            content=content,
+                            attachment=attachment,
+                        )
                     )
-                    await ctx.send(
-                        STR.ARCHIVE_SUCESSFULLY_SENT.format(ctx.author.mention)
-                    )
-                except Forbidden:
-                    await message.author.send(STR.ARCHIVE_ERR_SENDING)
-                except HTTPException:
-                    await message.author.send(STR.ARCHIVE_ERR_SENDING)
-                except InvalidArgument:
-                    await message.author.send(STR.ARCHIVE_ERR_SENDING)
 
-            except Exception as err:
-                print(err)
-                await message.author.send(STR.ARCHIVE_ERR)
+                file.write(STR.ARCHIVE_FILE_FOOTER)
+                print(
+                    STR.ARCHIVE_COMPLETED.format(
+                        message.channel.name, message.guild.name
+                    )
+                )
+
+            filename = STR.ARCHIVE_SEND_FILENAME.format(
+                message.channel.name, message.guild.name
+            )
+
+            discord_file = discord.File(log_file, filename)
+            try:
+                await message.author.send(
+                    content=STR.ARCHIVE_SEND_SUCCESSFUL.format(
+                        message.channel.name, message.guild.name
+                    ),
+                    file=discord_file,
+                )
+                await ctx.send(STR.ARCHIVE_SUCESSFULLY_SENT.format(ctx.author.mention))
+            except (Forbidden, HTTPException, InvalidArgument):
+                await message.author.send(STR.ARCHIVE_ERR_SENDING)
 
         os.remove(log_file)
 

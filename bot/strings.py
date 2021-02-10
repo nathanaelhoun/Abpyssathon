@@ -66,16 +66,10 @@ class Strings:
     ARCHIVE_SEND_SUCCESSFUL = EM_OK + "Archive du channel #{} (Serveur {})"
     ARCHIVE_SEND_FILENAME = "Archive-channel-{}-of-{}.txt"
 
-    ARCHIVE_ERR_ATTACHMENT = (
-        EM_FATAL + "Impossible d'attacher le fichier archive de #{} :sob:"
-    )
     ARCHIVE_ERR_SENDING = EM_FATAL + "Impossible d'envoyer l'archive :sob:"
-    ARCHIVE_ERR = EM_FATAL + "Impossible de créer l'archive :sob:"
 
     # Function : utitilies.createrole()
-    CREATEROLE_SUCCESS = (
-        EM_SUCCESS + "Nouveau rôle *{}* créé par _{}_ et ajouté à *{}*"
-    )
+    CREATEROLE_SUCCESS = EM_SUCCESS + "Nouveau rôle *{}* créé par _{}_ et ajouté à *{}*"
     CREATEROLE_ERR_PERMISSION = (
         EM_FATAL + "Je n'ai pas les permissions pour créer un rôle :sob:"
     )
