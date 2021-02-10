@@ -3,7 +3,6 @@ DROP TABLE score;
 DROP TABLE system; 
 
 -- CREATE ALL
-
 CREATE TABLE score (
     sco_guild_id BIGINT,
     sco_member_id BIGINT,

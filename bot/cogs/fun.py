@@ -18,7 +18,7 @@ class Fun(commands.Cog):
 
     @commands.command()
     async def ping2(self, ctx: commands.Context):
-        """Answer pong to ping and tag the best user of the server (Medhi)"""
+        """Answer pong to ping and tag the best user of Discord (Medhi)"""
 
         await ctx.send(STR.PING2)
 

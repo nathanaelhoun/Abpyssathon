@@ -3,10 +3,12 @@ import asyncio
 from sys import exit as sysExit
 from psycopg2 import Error as psycopg2Error
 from dotenv import load_dotenv
+from discord import __version__ as discord_version_info
 
 from postgresql_manager import PostgresqlManager
 from abpyssathon import Abpyssathon
 
+print("Running with discordpy " + discord_version_info)
 print("Loading environment variables... ", end="")
 load_dotenv()
 print("done!")
@@ -25,6 +27,7 @@ client = Abpyssathon(command_prefix="&", database=db)
 print("Loading extensions... ", end="")
 client.load_extension("cogs.events")
 client.load_extension("cogs.fun")
+client.load_extension("cogs.roles")
 client.load_extension("cogs.score")
 client.load_extension("cogs.utilities")
 print("done!")

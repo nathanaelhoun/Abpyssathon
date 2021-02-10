@@ -4,7 +4,7 @@ from psycopg2 import Error as psycopg2Error
 
 from strings import Strings as STR
 from strings import Pluralizer
-from methods import parse_mentions
+from utils import parse_mentions
 
 
 class Score(commands.Cog):
@@ -27,7 +27,7 @@ class Score(commands.Cog):
         try:
             rows = self.bot.database.execute(
                 """
-                SELECT *
+                SELECT sco_member_id, sco_value
                 FROM score
                 WHERE sco_guild_id = {}
                 ORDER BY sco_value DESC
@@ -41,29 +41,22 @@ class Score(commands.Cog):
                 return
 
             result_string = ""
-            i = 0
             rank = 0
             previous_value = 0
-            for row in rows:
-                i += 1
-                # guild_id = row[0]
-                member_id = row[1]
-                value = row[2]
+            for i, row in enumerate(rows):
+                row_member_id = row[0]
+                row_value = row[1]
 
-                member_name = ""
-                for member in ctx.guild.members:
-                    if member.id == member_id:
-                        member_name = member.display_name
-
+                member_name = ctx.guild.get_member(row_member_id).display_name
                 if member_name == "":
                     member_name = STR.SCORE_SHOW_MEMBER_HAS_LEFT
 
-                if previous_value != value:
-                    previous_value = value
-                    rank = i
+                if previous_value != row_value:
+                    previous_value = row_value
+                    rank = i + 1
 
                 result_string += "\n" + STR.SCORE_SHOW_RANKING_ITEM.format(
-                    rank, member_name, Pluralizer(value)
+                    rank, member_name, Pluralizer(row_value)
                 )
 
             embed = DiscordEmbed(
@@ -88,18 +81,14 @@ class Score(commands.Cog):
         INSERT INTO score VALUES
         """
         data_sql = []
-        members_name = ""
-
-        for member in members:
-            if members_name != "":
+        for i, member in enumerate(members):
+            if i != 0:
                 sql += ", "
-                members_name += ", "
 
             sql += "(%s, %s, %s) "
             data_sql.append(ctx.guild.id)
             data_sql.append(member.id)
             data_sql.append(value)
-            members_name += member.display_name
 
         sql += """
         ON CONFLICT (sco_guild_id, sco_member_id) 
@@ -109,15 +98,16 @@ class Score(commands.Cog):
         try:
             self.bot.database.insert(sql, data_sql)
 
-            message = STR.SCORE_ADD_SUCCESSFULLY.format(
-                Pluralizer(value), members_name, ctx.author.display_name
-            )
-            if value < 0:
-                message = STR.SCORE_REMOVE_SUCCESSFULLY.format(
-                    Pluralizer(-value), members_name, ctx.author.display_name
-                )
+            msg = STR.SCORE_ADD_SUCCESS if (value > 0) else STR.SCORE_REMOVE_SUCCESS
+            value = value if (value > 0) else -value
 
-            await ctx.send(message)
+            await ctx.send(
+                msg.format(
+                    Pluralizer(value),
+                    ", ".join(m.display_name for m in members),
+                    ctx.author.display_name,
+                )
+            )
 
         except psycopg2Error as err:
             print(err)
