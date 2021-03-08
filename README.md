@@ -4,17 +4,17 @@ A Discordbot for my class group, written in Python with [discordpy](https://disc
 
 # Features
 
-- 🏆 Count the points for all members and output a ranking. A point equals the absence to one lesson
-- 🎲 Pick a random member, he/she will have to do this task no one wants to do
+- 🏆 Count the points for all members and output a ranking. A point equals to an absence during one lesson
+- 🎲 Pick a random member, he/she will have to do _this_ task no one wants to do
 - 🎲 Make random teams with the members of a discord role, to gain time for our class projects
 - 🏷️ Create roles in the guild (because we create a lot of roles)
-- 🏓 Last but not least, answers "Pong" to "&ping" (plus a special Medhi version with "&ping2")
+- 🏓 Last but not least, answers "Pong" to "&ping" (plus a special Medhi version with `&ping2`)
 
 See all commands with the `&help` bot command.
 
 # Deployment
 
-If you wish to use my instance of the bot, you can contact me at my email ([See my profile](https://github.com/nathanaelhoun)).
+If you wish to use my bot, you can email me ([see my profile](https://github.com/nathanaelhoun)).
 Otherwise you can deploy it by yourself:
 
 1. Clone the repository
