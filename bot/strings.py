@@ -68,7 +68,7 @@ class Strings:
 
     # Command groupe : roles()
     ROLE_CREATE_SUCCESS = (
-        EM_SUCCESS + "Nouveau rôle *{}* créé par _{}_ et ajouté à *{}*"
+        EM_SUCCESS + "Nouveau rôle {} créé par _{}_ et ajouté à **{}**"
     )
     ROLE_CREATE_ERR_PERMISSION = (
         EM_FATAL + "Je n'ai pas les permissions pour créer un rôle :sob:"
@@ -78,7 +78,9 @@ class Strings:
     ROLE_CREATE_ERR_ADDED = (
         EM_WARN + "Le rôle n'a pas été ajouté à tous les membres demandés, déso."
     )
-    ROLE_CREATE_ERR_EXISTING = EM_WARN + "Le rôle {} existe déjà, la preuve!"
+    ROLE_ADDED_SUCCESS = (
+        EM_SUCCESS + "Rôle {} repris par _{}_ et ajouté à **{}**"
+    )
 
     ROLE_SHOW_TEXT = ":label: Il y a un total de {:N rôle/s} sur ce serveur !"
     ROLE_SHOW_INTRO = (

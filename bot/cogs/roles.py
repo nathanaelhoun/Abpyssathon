@@ -32,31 +32,29 @@ class Roles(commands.Cog):
             return
 
         role = discord.utils.get(ctx.message.author.guild.roles, name=role_name)
-        if role is not None:
-            await ctx.send(STR.ROLE_CREATE_ERR_EXISTING.format(role.mention))
-            return
-
-        try:
-            role = await ctx.guild.create_role(
-                name=role_name,
-                mentionable=True,
-                hoist=True,
-                colour=discord.Colour.random(),
-            )
-        except Forbidden as err:
-            await ctx.send(STR.ROLE_CREATE_ERR_PERMISSION)
-            print(err)
-        except HTTPException as err:
-            await ctx.send(STR.ROLE_CREATE_ERR_HTTP)
-            print(err)
-        except InvalidArgument as err:
-            await ctx.send(STR.ROLE_CREATE_INVALID_ARG)
-            print(err)
+        role_already_exists = role is not None
+        if not role_already_exists:
+            try:
+                role = await ctx.guild.create_role(
+                    name=role_name,
+                    mentionable=True,
+                    hoist=True,
+                    colour=discord.Colour.random(),
+                )
+            except Forbidden as err:
+                await ctx.send(STR.ROLE_CREATE_ERR_PERMISSION)
+                print(err)
+            except HTTPException as err:
+                await ctx.send(STR.ROLE_CREATE_ERR_HTTP)
+                print(err)
+            except InvalidArgument as err:
+                await ctx.send(STR.ROLE_CREATE_INVALID_ARG)
+                print(err)
 
         if role is None:
             return
 
-        # The role has been created
+        # The role has been created or is reused
         member_names = []
         try:
             for member in members:
@@ -69,10 +67,9 @@ class Roles(commands.Cog):
             await ctx.send(STR.ROLE_CREATE_ERR_HTTP)
             print(err)
 
+        msg = STR.ROLE_ADDED_SUCCESS if role_already_exists else STR.ROLE_CREATE_SUCCESS
         await ctx.send(
-            STR.ROLE_CREATE_SUCCESS.format(
-                role.mention, ctx.author.display_name, ", ".join(member_names)
-            )
+            msg.format(role.mention, ctx.author.display_name, ", ".join(member_names))
         )
 
         if len(member_names) != len(members):
