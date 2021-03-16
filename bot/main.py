@@ -22,7 +22,7 @@ except psycopg2Error as err:
     print("Failed :(", err)
     sysExit(1)
 
-client = Abpyssathon(command_prefix="&", database=db)
+client = Abpyssathon(command_prefix=os.getenv("BOT_PREFIX", "&"), database=db)
 
 print("Loading extensions... ", end="")
 client.load_extension("cogs.events")
