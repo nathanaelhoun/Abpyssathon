@@ -1,5 +1,6 @@
 from discord.ext import commands
 import discord
+from sys import stderr
 
 from strings import Strings as STR
 
@@ -35,8 +36,22 @@ class Events(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, ctx: commands.Context):
         """Check that we are not in a DM Channel"""
-        if isinstance(ctx.channel, discord.DMChannel) and not ctx.author.bot:
+        if ctx.author.bot:
+            return
+
+        if isinstance(ctx.channel, discord.DMChannel):
             await ctx.channel.send(STR.ERR_PRIVATE_CHANNEL)
+            return
+
+        typiquement = ["typically", "typique"]
+
+        if any(string in ctx.clean_content.lower() for string in typiquement):
+            try:
+                await ctx.add_reaction("<:typiqu:774272487528726548>")
+                await ctx.add_reaction("<:ement:774272498161418290>")
+            except discord.errors.HTTPException:
+                print("Unknown emoji :typiqu: or :ement: from guild '{}'".format(ctx.guild), file=stderr)
+
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx: commands.Context, error):
