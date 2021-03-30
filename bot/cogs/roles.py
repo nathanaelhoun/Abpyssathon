@@ -1,6 +1,7 @@
 from discord.ext import commands
 import discord
 from discord.errors import Forbidden, HTTPException, InvalidArgument
+from psycopg2 import Error as psycopg2Error
 
 from strings import Pluralizer, Strings as STR
 from utils import parse_mentions
@@ -102,6 +103,59 @@ class Roles(commands.Cog):
             STR.ROLE_SHOW_TEXT.format(Pluralizer(len(ctx.guild.roles))),
             embed=embed,
         )
+
+    @roles.command()
+    async def save(self, ctx: commands.Context):
+        """Save the current roles of all users in the database"""
+
+        try:
+
+            members = ctx.guild.members
+
+            role_ids_by_member = dict()
+
+            for member in members:
+                role_ids_by_member[member.id] = list()
+                for role in member.roles:
+                    if role.name == "@everyone":
+                        continue
+
+                    role_ids_by_member[member.id].append(role.id)
+
+            print(role_ids_by_member)
+
+            sql = """
+                INSERT INTO roles VALUES
+            """
+            data_sql = []
+            is_first = True
+            for member_id, roles_ids in role_ids_by_member.items():
+                if is_first:
+                    is_first = False
+                else:
+                    sql += ", "
+
+                sql += "(%s, %s, %s) "
+                data_sql.append(ctx.guild.id)
+                data_sql.append(member_id)
+                data_sql.append(",".join(str(id) for id in roles_ids))
+
+            sql += """
+                ON CONFLICT (ro_guild_id, ro_member_id)
+                DO UPDATE SET ro_list = EXCLUDED.ro_list;
+            """
+
+            try:
+                self.bot.database.insert(sql, data_sql)
+
+                await ctx.send(STR.ROLE_SAVE_SUCCESS)
+
+            except psycopg2Error as err:
+                print(err)
+                await ctx.send(STR.ROLE_SAVE_ERR)
+
+        except Exception as err:
+            print(err)
 
 
 def setup(bot):

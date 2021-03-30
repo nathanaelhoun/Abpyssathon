@@ -91,6 +91,9 @@ class Strings:
     )
     ROLE_SHOW_ITEM = "|{:30s}|{:7d}|{:7d}|"
 
+    ROLE_SAVE_SUCCESS = EM_SUCCESS + "Sauvegarde des rôles pour ce serveur réussie !"
+    ROLE_SAVE_ERR = EM_FATAL + "Je n'ai pas réussi à sauvegarder les rôles pour ce serveur... Désolé :sob:"
+
     # Commands group : utilities.random()
     RANDOM_ERR_WRONG_NB_PER_TEAM = (
         EM_WARN
