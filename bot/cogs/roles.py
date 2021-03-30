@@ -157,92 +157,78 @@ class Roles(commands.Cog):
         """Restore the roles of the mentionned users from the last save"""
         # mentions argument is used to the &help generation
 
-        try:
+        members = parse_mentions(ctx.message)
+        if len(members) == 0:
+            await ctx.send(STR.ERR_MISSING_REQUIRED_ARGUMENT)
+            return
 
-            members = parse_mentions(ctx.message)
-            if len(members) == 0:
-                await ctx.send(STR.ERR_MISSING_REQUIRED_ARGUMENT)
+        try:
+            rows = self.bot.database.execute(
+                """
+                SELECT ro_member_id, ro_list
+                FROM roles
+                WHERE ro_guild_id = {}
+                AND ro_member_id IN ({})
+                """.format(
+                    ctx.guild.id,
+                    ",".join("'{}'".format(str(member.id)) for member in members),
+                )
+            )
+
+            if len(rows) == 0:
+                await ctx.send(STR.ROLE_RESTORE_NO_SAVE)
                 return
 
-            try:
-                rows = self.bot.database.execute(
-                    """
-                    SELECT ro_member_id, ro_list
-                    FROM roles
-                    WHERE ro_guild_id = {}
-                    AND ro_member_id IN ({})
-                    """.format(
-                        ctx.guild.id,
-                        ",".join("'{}'".format(str(member.id)) for member in members),
+            embed = discord.Embed()
+
+            for _, row in enumerate(rows):
+                member = discord.utils.get(members, id=row[0])
+                role_ids = row[1].split(",")
+
+                added_roles = list()
+                errored_roles = dict()
+                for role_id in role_ids:
+                    role = discord.utils.get(
+                        ctx.message.author.guild.roles, id=int(role_id)
                     )
-                )
+                    if role is None:
+                        errored_roles["unknown"] += 1
+                        continue
 
-                if len(rows) == 0:
-                    await ctx.send("Pas de sauvegarde pour ces utilisateurs")
-                    return
+                    try:
+                        await member.add_roles(role, atomic=True)
+                        added_roles.append(role)
+                    except Forbidden as err:
+                        errored_roles[role.name] = err.__str__()
+                    except HTTPException as err:
+                        errored_roles[role.name] = err.__str__()
 
-                embed = discord.Embed()
+                if len(added_roles) > 0:
+                    embed.add_field(
+                        name=STR.ROLE_RESTORE_SUCCESS_TITLE.format(
+                            Pluralizer(len(added_roles)),
+                            member.display_name,
+                        ),
+                        value="\n".join("- @{}".format(r.name) for r in added_roles),
+                    )
 
-                for _, row in enumerate(rows):
-                    member = discord.utils.get(members, id=row[0])
-                    role_ids = row[1].split(",")
+                if len(errored_roles) > 0:
+                    embed.add_field(
+                        name=STR.ROLE_RESTORE_ERROR_TITLE.format(
+                            Pluralizer(len(errored_roles)),
+                            member.display_name,
+                        ),
+                        value="\n".join(
+                            "- @{}: {}".format(r, e) for r, e in errored_roles.items()
+                        ),
+                        inline=False,
+                    )
 
-                    added_roles = list()
-                    errored_roles = dict()
-                    unknown_roles_nb = 0
-                    for role_id in role_ids:
-                        role = discord.utils.get(
-                            ctx.message.author.guild.roles, id=int(role_id)
-                        )
-                        if role is None:
-                            unknown_roles_nb += 1
-                            continue
+            await ctx.send(STR.ROLE_RESTORE_TITLE, embed=embed)
 
-                        try:
-                            await member.add_roles(role, atomic=True)
-                            added_roles.append(role)
-                        except Forbidden as err:
-                            print(err)
-                            errored_roles[role.name] = err.__str__()
-                        except HTTPException as err:
-                            print(err)
-                            errored_roles[role.name] = err.__str__()
-
-                    if len(added_roles) > 0:
-                        embed.add_field(
-                            name="{} rôles restaurés pour {}".format(
-                                len(added_roles),
-                                member.display_name,
-                            ),
-                            value="\n".join(
-                                "- @{}".format(r.name) for r in added_roles
-                            ),
-                        )
-
-                    if len(errored_roles) > 0 or unknown_roles_nb > 0:
-                        embed.add_field(
-                            name="{} erreurs pour la restauration pour {}".format(
-                                len(errored_roles) + unknown_roles_nb,
-                                member.display_name,
-                            ),
-                            value="- {:N inconnu/s}\n".format(
-                                Pluralizer(unknown_roles_nb),
-                            )
-                            + "\n".join(
-                                "- @{}: {}".format(r, e)
-                                for r, e in errored_roles.items()
-                            ),
-                            inline=False,
-                        )
-
-                await ctx.send("Restauration des rôles !", embed=embed)
-
-            except psycopg2Error as err:
-                print(err)
-                await ctx.send(STR.ERR_DATABASE)
-
-        except Exception as err:
+        except psycopg2Error as err:
             print(err)
+            await ctx.send(STR.ERR_DATABASE)
 
 
 def setup(bot):

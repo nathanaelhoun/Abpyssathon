@@ -1,6 +1,7 @@
+from sys import stderr
+
 from discord.ext import commands
 import discord
-from sys import stderr
 
 from strings import Strings as STR
 
@@ -50,8 +51,12 @@ class Events(commands.Cog):
                 await ctx.add_reaction("<:typiqu:774272487528726548>")
                 await ctx.add_reaction("<:ement:774272498161418290>")
             except discord.errors.HTTPException:
-                print("Unknown emoji :typiqu: or :ement: from guild '{}'".format(ctx.guild), file=stderr)
-
+                print(
+                    "Unknown emoji :typiqu: or :ement: from guild '{}'".format(
+                        ctx.guild
+                    ),
+                    file=stderr,
+                )
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx: commands.Context, error):
