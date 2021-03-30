@@ -96,7 +96,9 @@ class Strings:
         + " serveur... Désolé :sob:"
     )
 
+    ROLE_RESTORE_NOTIF_BEGIN = "Je commence la restauration, ça peut prendre un peu de temps..."
     ROLE_RESTORE_NO_SAVE = EM_WARN + "Pas de sauvegarde pour ces utilisateurs"
+    ROLE_RESTORE_UNKNOWN_ROLE = "Rôle inconnu"
     ROLE_RESTORE_TITLE = ":construction_worker: Restauration des rôles !"
     ROLE_RESTORE_SUCCESS_TITLE = EM_SUCCESS + "{:N rôle/s} restauré(s) pour {}"
     ROLE_RESTORE_ERROR_TITLE = EM_FATAL + "{:N erreur/s} pour la restauration pour {}"

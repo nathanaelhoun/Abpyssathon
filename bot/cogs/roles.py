@@ -179,52 +179,57 @@ class Roles(commands.Cog):
                 await ctx.send(STR.ROLE_RESTORE_NO_SAVE)
                 return
 
-            embed = discord.Embed()
+            async with ctx.channel.typing():
+                await ctx.send(STR.ROLE_RESTORE_NOTIF_BEGIN)
 
-            for _, row in enumerate(rows):
-                member = discord.utils.get(members, id=row[0])
-                role_ids = row[1].split(",")
+                embed = discord.Embed()
 
-                added_roles = list()
-                errored_roles = dict()
-                for role_id in role_ids:
-                    role = discord.utils.get(
-                        ctx.message.author.guild.roles, id=int(role_id)
-                    )
-                    if role is None:
-                        errored_roles["unknown"] += 1
-                        continue
+                for _, row in enumerate(rows):
+                    member = discord.utils.get(members, id=row[0])
+                    role_ids = row[1].split(",")
 
-                    try:
-                        await member.add_roles(role, atomic=True)
-                        added_roles.append(role)
-                    except Forbidden as err:
-                        errored_roles[role.name] = err.__str__()
-                    except HTTPException as err:
-                        errored_roles[role.name] = err.__str__()
+                    added_roles = list()
+                    errored_roles = dict()
+                    errored_roles[STR.ROLE_RESTORE_UNKNOWN_ROLE] = 0
+                    for role_id in role_ids:
+                        role = discord.utils.get(
+                            ctx.message.author.guild.roles, id=int(role_id)
+                        )
+                        if role is None:
+                            errored_roles[STR.ROLE_RESTORE_UNKNOWN_ROLE] += 1
+                            continue
 
-                if len(added_roles) > 0:
-                    embed.add_field(
-                        name=STR.ROLE_RESTORE_SUCCESS_TITLE.format(
-                            Pluralizer(len(added_roles)),
-                            member.display_name,
-                        ),
-                        value="\n".join("- @{}".format(r.name) for r in added_roles),
-                    )
+                        try:
+                            await member.add_roles(role, atomic=True)
+                            added_roles.append(role)
+                        except Forbidden as err:
+                            errored_roles[role.name] = err.__str__()
+                        except HTTPException as err:
+                            errored_roles[role.name] = err.__str__()
 
-                if len(errored_roles) > 0:
-                    embed.add_field(
-                        name=STR.ROLE_RESTORE_ERROR_TITLE.format(
-                            Pluralizer(len(errored_roles)),
-                            member.display_name,
-                        ),
-                        value="\n".join(
-                            "- @{}: {}".format(r, e) for r, e in errored_roles.items()
-                        ),
-                        inline=False,
-                    )
+                    if len(added_roles) > 0:
+                        embed.add_field(
+                            name=STR.ROLE_RESTORE_SUCCESS_TITLE.format(
+                                Pluralizer(len(added_roles)),
+                                member.display_name,
+                            ),
+                            value="\n".join("- {}".format(r.name) for r in added_roles),
+                        )
 
-            await ctx.send(STR.ROLE_RESTORE_TITLE, embed=embed)
+                    if len(errored_roles) > 0:
+                        embed.add_field(
+                            name=STR.ROLE_RESTORE_ERROR_TITLE.format(
+                                Pluralizer(len(errored_roles)),
+                                member.display_name,
+                            ),
+                            value="\n".join(
+                                "- {}: {}".format(r, e)
+                                for r, e in errored_roles.items()
+                            ),
+                            inline=False,
+                        )
+
+                await ctx.send(STR.ROLE_RESTORE_TITLE, embed=embed)
 
         except psycopg2Error as err:
             print(err)
