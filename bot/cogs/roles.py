@@ -235,6 +235,45 @@ class Roles(commands.Cog):
             print(err)
             await ctx.send(STR.ERR_DATABASE)
 
+    @roles.command()
+    async def whois(
+        self, ctx: commands.Context, roletags: str
+    ):  # pylint: disable=unused-argument
+        """Restore the roles of the mentionned users from the last save"""
+        # mentions argument is used to the &help generation
+
+        if len(ctx.message.mentions) > 0:
+            await ctx.send(STR.ROLE_WHOIS_ERR_USERTAG)
+            return
+
+        if len(ctx.message.role_mentions) <= 0:
+            await ctx.send(STR.ERR_MISSING_REQUIRED_ARGUMENT)
+            return
+
+        embed = discord.Embed()
+
+        if ctx.message.mention_everyone:
+            embed.add_field(
+                name=STR.ROLE_WHOIS_TITLE.format("everyone"),
+                value=STR.ROLE_WHOIS_EVERYONE,
+                inline=False,
+            )
+
+        for role in ctx.message.role_mentions:
+            if len(role.members) <= 0:
+                embed.add_field(
+                    name=STR.ROLE_WHOIS_TITLE.format(role.name),
+                    value=STR.ROLE_WHOIS_NOONE,
+                )
+                continue
+
+            embed.add_field(
+                name=STR.ROLE_WHOIS_TITLE.format(role.name),
+                value="\n".join("- {}".format(m.name) for m in role.members),
+            )
+
+        await ctx.send(STR.ROLE_WHOIS_TEXT, embed=embed)
+
 
 def setup(bot):
     """Add this class to the bot"""
