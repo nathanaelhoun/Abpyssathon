@@ -78,9 +78,7 @@ class Strings:
     ROLE_CREATE_ERR_ADDED = (
         EM_WARN + "Le rôle n'a pas été ajouté à tous les membres demandés, déso."
     )
-    ROLE_ADDED_SUCCESS = (
-        EM_SUCCESS + "Rôle {} repris par _{}_ et ajouté à **{}**"
-    )
+    ROLE_ADDED_SUCCESS = EM_SUCCESS + "Rôle {} repris par _{}_ et ajouté à **{}**"
 
     ROLE_SHOW_TEXT = ":label: Il y a un total de {:N rôle/s} sur ce serveur !"
     ROLE_SHOW_INTRO = (
@@ -91,6 +89,33 @@ class Strings:
     )
     ROLE_SHOW_ITEM = "|{:30s}|{:7d}|{:7d}|"
 
+    ROLE_SAVE_SUCCESS = EM_SUCCESS + "Sauvegarde des rôles pour ce serveur réussie !"
+    ROLE_SAVE_ERR = (
+        EM_FATAL
+        + "Je n'ai pas réussi à sauvegarder les rôles pour ce serveur... Désolé :sob:"
+    )
+
+    ROLE_RESTORE_NOTIF_BEGIN = (
+        "Je commence la restauration, ça peut prendre un peu de temps..."
+    )
+    ROLE_RESTORE_NO_SAVE = EM_WARN + "Pas de sauvegarde pour ces utilisateurs"
+    ROLE_RESTORE_UNKNOWN_ROLE = "Rôle inconnu"
+    ROLE_RESTORE_TITLE = ":construction_worker: Restauration des rôles !"
+    ROLE_RESTORE_SUCCESS_TITLE = (
+        EM_SUCCESS + "{:N rôle/s} restauré(s) pour {} (depuis {})"
+    )
+    ROLE_RESTORE_ERROR_TITLE = EM_FATAL + "{:N erreur/s} pour la restauration pour {}"
+
+    ROLE_WHOIS_ERR_USERTAG = (
+        EM_WARN + "Cela ne fonctionne que pour les rôles, pas pour les tags"
+    )
+    ROLE_WHOIS_TEXT = ":detective: Voici qui est qui !"
+    ROLE_WHOIS_TITLE = ":label: Rôle {}"
+    ROLE_WHOIS_NOONE = ":question: Personne n'a ce rôle"
+    ROLE_WHOIS_EVERYONE = (
+        "Bah devine quoi... :thinking: Tout le monde. Vraiment, on me dérange"
+        + " pour me poser ce genre de question, ça me fatigue !"
+    )
     # Commands group : utilities.random()
     RANDOM_ERR_WRONG_NB_PER_TEAM = (
         EM_WARN

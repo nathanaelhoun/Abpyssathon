@@ -8,6 +8,7 @@ from discord import __version__ as discord_version_info
 from postgresql_manager import PostgresqlManager
 from abpyssathon import Abpyssathon
 
+print("\n")
 print("Running with discordpy " + discord_version_info)
 print("Loading environment variables... ", end="")
 load_dotenv()
@@ -33,7 +34,7 @@ client.load_extension("cogs.utilities")
 print("done!")
 
 print("Ready to launch client. ", end="")
-print("Running client...")
+print("Starting client...\n")
 
 try:
     client.run(os.getenv("BOT_TOKEN"))
