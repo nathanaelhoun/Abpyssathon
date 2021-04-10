@@ -92,8 +92,7 @@ class Strings:
     ROLE_SAVE_SUCCESS = EM_SUCCESS + "Sauvegarde des rôles pour ce serveur réussie !"
     ROLE_SAVE_ERR = (
         EM_FATAL
-        + "Je n'ai pas réussi à sauvegarder les rôles pour ce"
-        + " serveur... Désolé :sob:"
+        + "Je n'ai pas réussi à sauvegarder les rôles pour ce serveur... Désolé :sob:"
     )
 
     ROLE_RESTORE_NOTIF_BEGIN = (
@@ -102,7 +101,9 @@ class Strings:
     ROLE_RESTORE_NO_SAVE = EM_WARN + "Pas de sauvegarde pour ces utilisateurs"
     ROLE_RESTORE_UNKNOWN_ROLE = "Rôle inconnu"
     ROLE_RESTORE_TITLE = ":construction_worker: Restauration des rôles !"
-    ROLE_RESTORE_SUCCESS_TITLE = EM_SUCCESS + "{:N rôle/s} restauré(s) pour {} (depuis {})"
+    ROLE_RESTORE_SUCCESS_TITLE = (
+        EM_SUCCESS + "{:N rôle/s} restauré(s) pour {} (depuis {})"
+    )
     ROLE_RESTORE_ERROR_TITLE = EM_FATAL + "{:N erreur/s} pour la restauration pour {}"
 
     ROLE_WHOIS_ERR_USERTAG = (
