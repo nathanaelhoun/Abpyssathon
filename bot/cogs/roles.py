@@ -131,7 +131,7 @@ class Roles(commands.Cog):
             else:
                 sql += ", "
 
-            sql += "(%s, %s, %s) "
+            sql += "(%s, %s, %s, NOW()) "
             data_sql.append(ctx.guild.id)
             data_sql.append(member_id)
             data_sql.append(",".join(str(id) for id in roles_ids))
@@ -165,7 +165,7 @@ class Roles(commands.Cog):
         try:
             rows = self.bot.database.execute(
                 """
-                SELECT ro_member_id, ro_list
+                SELECT ro_member_id, ro_list, TO_CHAR(ro_updated_at, 'YYYY-MM-DD HH24:MI:SS')
                 FROM roles
                 WHERE ro_guild_id = {}
                 AND ro_member_id IN ({})
@@ -187,6 +187,7 @@ class Roles(commands.Cog):
                 for _, row in enumerate(rows):
                     member = discord.utils.get(members, id=row[0])
                     role_ids = row[1].split(",")
+                    updated_at = row[2]
 
                     added_roles = list()
                     errored_roles = dict()
@@ -212,11 +213,13 @@ class Roles(commands.Cog):
                             name=STR.ROLE_RESTORE_SUCCESS_TITLE.format(
                                 Pluralizer(len(added_roles)),
                                 member.display_name,
+                                updated_at
                             ),
-                            value="\n".join("- {}".format(r.name) for r in added_roles),
+                            value="\n".join( "- {} ({})".format(r.name, r.id) for r in added_roles),
                         )
 
-                    if len(errored_roles) > 0:
+                    if len(errored_roles) > 1 or errored_roles[STR.ROLE_RESTORE_UNKNOWN_ROLE] > 0:
+                        print(errored_roles)
                         embed.add_field(
                             name=STR.ROLE_RESTORE_ERROR_TITLE.format(
                                 Pluralizer(len(errored_roles)),
